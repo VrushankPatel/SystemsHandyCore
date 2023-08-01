@@ -1,0 +1,95 @@
+1) What is Apache Kafka1
+-> A messaging system or a message broker
+A streaming platform
+Publish-Subscribe system
+
+2) What do you mean by a Partition in Kafka?
+-> Partitioning is what enables messages to be split in parallel across several brokers in the cluster. 
+Using this method of parallelism, Kafka scales to support multiple consumers and producers simultaneously. 
+This method of partitioning allows linear scaling for both consumers as well as producers
+
+3) Usage of kafka
+-> Event streaming
+Messaging broker
+Activity tracking
+Logs gathering
+Real-time analytics
+Metrics collections
+Event Bus for reactive microservices
+
+4) What are the major components of Kafka?
+-> Kafka Producer. The producer acts as a message sender.
+Kafka Consumer. The consumer acts as the message receiver. ...
+Kafka Broker. The Kafka Broker is nothing but just a running instance of kafka server. ...
+Kafka Cluster. A Kafka cluster is a system that consists of several Brokers, Topics, and Partitions for both. 
+Kafka Topic. Assume it like a table in database, we have topic in kafka but it can't be queried like table in db. Kafka topics are the categories used to organize messages.
+Kafka Partitions. messages to be split in parallel across several brokers in the cluster
+Offsets. like an index in database. The offset is a unique ID assigned to the partitions, which contains messages. 
+Consumer Groups. Multiple consumers from same group consuming the data by sharing the load so that they all consume unique data only.
+
+5) What are the traditional methods of message transfer? How is Kafka better from them
+-> In Apache Kafka, the traditional method of message transfer has two ways: Queuing: In the queuing method, a pool of consumers may read messages from the server, and each message goes to one of them. Publish-Subscribe: In the Publish-Subscribe model, messages are broadcasted to all consumers.
+Kafka provides both the methods implementations but also, comes with rich features of compression and batching of the data that need to be produced.
+Also, immutable topics that can not be queried, retention policy for the data that gets stored in kafka broker, Streams and connect API make kafka even better than the rest of the tools available in the industry.
+
+6) Layers of kafka
+-> Compute layer and storage Layer
+
+7) Explain the four core API architecture that Kafka uses.
+-> Producer and Consumer APIs
+The foundation of Kafka’s powerful application layer is two primitive APIs for accessing the storage—the producer API for writing events and the consumer API for reading them. On top of these are APIs built for integration and processing.
+
+Kafka Connect
+Kafka Connect, which is built on top of the producer and consumer APIs, provides a simple way to integrate data across Kafka and external systems. Source connectors bring data from external systems and produce it to Kafka topics. Sink connectors take data from Kafka topics and write it to external systems.
+
+Kafka Streams
+For processing events as they arrive, we have Kafka Streams, a Java library that is built on top of the producer and consumer APIs. Kafka Streams allows you to perform real-time stream processing, powerful transformations, and aggregations of event data.
+
+ksqlDB
+Building on the foundation of Kafka Streams, we also have ksqlDB, a streaming database which allows for similar processing but with a declarative SQL-like syntax.
+
+8) what is zookeeper and why kafka uses it?
+-> zookeeper is a key-value store that comes with consensous algorithm implementation inbuilt in it. Kafka stores it's meta data (specially offset tracking data) in zookeeper and also, uses zookeeper's consensous algorithm to elect leader broker incase it dies.
+
+In other words, Zookeeper is used for metadata management in the Kafka world. For example: Zookeeper keeps track of which brokers are part of the Kafka cluster. Zookeeper is used by Kafka brokers to determine which broker is the leader of a given partition and topic and perform leader elections.
+
+9) Can we use kafka without zookeeper?
+-> Yes, we can do that. Nowadays, kafka is shipped with KRaft in it so leader election can be done without ZK. Also, we have to change the configuration of broker so that rather than storing metadata in zookeeper, kafka will create a topic for itself and will store the metadata in it.
+
+10) Explain the concept of Leader and Follower in Kafka.
+-> Leader: The replica that all requests from clients and other brokers of Kafka go to it. Each partition can only have one leader at a time. Follower: Other replicas that are not the leader. In-sync replica: replicas that frequently request for latest messages are considered in-sync.
+
+11) Why is Topic Replication important in Kafka? What do you mean by ISR in Kafka?
+-> Topic replication in Kafka means that data is written to not just one broker, but many. This improves the resilience and availability of the data in case of broker failures. The replication factor is a topic setting that determines how many copies of the data are maintained.
+
+12) What do you understand about a consumer group in Kafka?
+-> A consumer group is a set of consumers which cooperate to consume data from some topics. The partitions of all the topics are divided among the consumers in the group. As new group members arrive and old members leave, the partitions are re-assigned so that each member receives a proportional share of the partitions.
+
+13) How is kafka fault tolerent?
+-> Kafka is a fault-tolerant system that can continue operating without interruption when one or more of its components fail. Kafka achieves fault tolerance by replicating the partition data to other brokers. The replication factor is a configuration that specifies how many copies of the partition are needed, and it can be set at the topic level. Streams and tables are also fault tolerant because their data is stored reliably and durably in Kafka1. Thus, Kafka implements fault tolerance by applying replication to the partitions. We can define replication factor at the Topic level. We don’t set a replication factor of partitions, we set it for a Topic, and it applies to all partitions within the Topic2. Kafka provides configuration properties in order to handle adverse scenarios3.
+
+14) How does kafka handle data retention?
+-> Kafka provides a time-based retention policy that can be configured at the topic level. When a producer sends a message to Kafka, it appends it in a log file and retains it for a configured duration. With retention period properties in place, messages have a TTL (time to live). Upon expiry, messages are marked for deletion, thereby freeing up the disk space. The same retention period property applies to all messages within a given Kafka topic. Furthermore, we can set these properties either before topic creation or alter them at runtime for a pre-existing topic1.
+
+15) How to use kafka without zookeeper?
+-> To configure and use Kafka without Zookeeper, you can use Kafka Raft metadata mode (KRaft) 1. In KRaft, the Kafka metadata information will be stored as a partition within Kafka itself. There will be a KRaft Quorum of controller nodes which will be used to store the metadata. The metadata will be stored in an internal Kafka topic @metadata 1. The KRaft controllers collectively form a Kraft quorum, which stores all the metadata information regarding Kafka clusters 2. With this method, you eradicate the dependency of Zookeeper within Kafka environment architecture 2. You can follow the steps mentioned in this tutorial to install Kafka without Zookeeper.
+
+16) What is idempotancy in distributed systems?
+-> In distributed systems, an operation is said to be idempotent if running it multiple times has the same effect as running it once. Idempotency is an important concept in data engineering, particularly when working with distributed systems or databases. In a distributed system, multiple nodes may be executing the same operation concurrently. If the operation is not idempotent, this can lead to inconsistent results, as different nodes may end up with different outcomes12. Idempotency is a key building block in distributed systems because exactly-once delivery in distributed systems is impossible to achieve.
+
+17) What is the purpose of idempotant producer in kafka?
+-> The purpose of an idempotent producer in Kafka is to ensure that messages published on Kafka topics should not be duplicated from the producer side. It is a feature that ensures that a message must be persisted to the Kafka topic only once, even if the producer must retry requests upon failures. This feature is enabled by setting the enable.idempotence property to true in the producer configuration. With this feature enabled, Kafka ensures that duplicates are not introduced due to unexpected retries. The default value of enable.idempotence is false.
+
+18) How to create idempotant producer in kafka?
+-> To create an idempotent producer in Kafka, you can set the enable.idempotence property to true in the producer configuration1. When enable.idempotence is set to true, each producer gets assigned a Producer Id (PID) and the PID is included every time a producer sends messages to a broker. Additionally, each message gets a monotonically increasing sequence number (different from the offset - used only for protocol purposes). A separate sequence is maintained for each topic partition that a producer sends messages to. On the broker side, on a per partition basis, it keeps track of the largest PID-Sequence Number combination that is successfully written. When a lower sequence number is received, it is discarded1. With this feature enabled, Kafka ensures that duplicates are not introduced due to unexpected retries 1. The default value of enable.idempotence is false 2. Here’s an example of how to enable idempotence in Kafka:
+
+# create Producer properties
+properties = {
+    'bootstrap.servers': 'localhost:9092',
+    'acks': 'all',
+    'retries': 5,
+    'enable.idempotence': 'true'
+}
+
+
+
