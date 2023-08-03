@@ -218,7 +218,7 @@ If we check the partitions offsets, to understand more about how these produced 
 >>> kafka-topics.sh --bootstrap-server localhost:19092 --create --topic {TOPIC_NAME} --partitions 3 --replication-factor 1 --if-not-exists
 
 29) Write kafka command to create topic that has only 10 seconds of retention time.
-->
+-> Below is the command
 >>> kafka-topics.sh --bootstrap-server localhost:9092 --create --topic my-topic-with-short-retention-period --partitions 3 --replication-factor 1 --config retention.ms=10000 --config segment.ms=10000
 
 retention.ms :
@@ -229,11 +229,11 @@ By default, value of this is 7 days.
 This configuration controls the period of time after which Kafka will force the log to roll even if the segment file isn't full to ensure that retention can delete or compact old data.
 
 30) Write kafka command to change topic retention of existing topic..
-->
+-> Below is the command
 >>> kafka-configs.sh --bootstrap-server localhost:19092 --alter --topic first-topic --add-config retention.ms=10000
 
 31) Write kafka command to change number of partitions in existing topic..
-->
+-> Below is the command
 >>> kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic my-first-topic --partitions 5
 
 
@@ -250,3 +250,64 @@ This configuration controls the period of time after which Kafka will force the 
 
 
 
+
+
+
+
+====
+What is Apache Kafka, and what is its primary use case?
+Explain the key components of Kafka architecture.
+What is a Kafka topic, partition, and offset?
+How does Kafka ensure fault tolerance and high availability?
+What is the role of ZooKeeper in Kafka?
+What are producers and consumers in Kafka? How do they communicate with Kafka?
+How does Kafka handle message retention and cleanup?
+What is the purpose of a Kafka Connect, and how does it work?
+How do you achieve load balancing of consumers in a Kafka cluster?
+What is the significance of the consumer group in Kafka?
+What is the difference between a Kafka broker and a Kafka consumer?
+How does Kafka guarantee message ordering within a partition?
+Can a Kafka topic have multiple consumers belonging to different consumer groups? Explain how it affects message delivery.
+How do you handle schema evolution in Kafka when dealing with Avro or JSON data?
+What are some key considerations when deciding the number of partitions for a Kafka topic?
+How do you monitor Kafka cluster health and performance?
+Explain the concept of log compaction in Kafka.
+How can you ensure that a message is processed exactly once in Kafka, even in the face of failures?
+What is the role of a Kafka Schema Registry?
+How can you secure Kafka in a production environment?
+What is Apache Kafka? What are its main components?
+Explain what partitions and topics are in Kafka. How are they related?
+What is a Kafka broker? What are its responsibilities?
+What is a Kafka producer? How does it work?
+What is a Kafka consumer? How does it work?
+What is the role of Zookeeper in a Kafka cluster?
+What is the architecture of a Kafka cluster?
+How does Kafka provide high availability and fault tolerance?
+What is the role of offsets in Kafka? How are they used?
+How does Kafka handle data replication? What is the replication factor?
+Explain Kafka's retention and log compaction. How do they work?
+How does Kafka achieve high throughput and low latency?
+What delivery semantics does Kafka provide? (at most once, at least once, exactly once)
+What are some use cases where Kafka is commonly used?
+How is Kafka different from other message queues like RabbitMQ or ActiveMQ?
+What are some challenges when using Kafka? How would you troubleshoot issues?
+What is the role of the Kafka Controller in a Kafka cluster, and how does it function?
+How does Kafka handle data retention, and what factors might influence your retention policy?
+Explain the concept of Kafka message serialization and deserialization. Why is it essential?
+What are the different types of Kafka APIs, and in what scenarios would you use each of them?
+How can you handle consumer lag in Kafka, and why is it crucial to monitor and manage it?
+Describe the Kafka log compaction process and its benefits.
+How does Kafka handle data distribution and rebalancing across brokers?
+Explain the concept of idempotent producers in Kafka. How can you ensure idempotency?
+What are the key differences between Kafka and other messaging systems like RabbitMQ or ActiveMQ?
+How can you guarantee message delivery to Kafka in the case of network or node failures?
+Describe the role of Apache Avro in Kafka and how it facilitates schema evolution.
+What is the use of the Kafka Streams library, and how does it differ from Kafka Connect?
+How does the Kafka Producer achieve high throughput and fault tolerance?
+Explain the process of data replication in a Kafka cluster.
+How can you optimize Kafka performance for low-latency scenarios?
+Describe the process of Kafka broker discovery in a consumer application.
+What is the purpose of the Kafka MirrorMaker, and how is it used in multi-datacenter setups?
+How can you handle message reprocessing in Kafka without impacting downstream consumers?
+Explain the concept of "Exactly Once Semantics" in Kafka and how it is achieved.
+What are some best practices for monitoring and managing Kafka in a production environment?
