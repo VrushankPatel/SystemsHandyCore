@@ -26,6 +26,7 @@ Kafka Topic. Assume it like a table in database, we have topic in kafka but it c
 Kafka Partitions. messages to be split in parallel across several brokers in the cluster
 Offsets. like an index in database. The offset is a unique ID assigned to the partitions, which contains messages. 
 Consumer Groups. Multiple consumers from same group consuming the data by sharing the load so that they all consume unique data only.
+KafkaPartitioner: KafkaPartitioner hashes the key and value of the message and based on the hash, it maps the key to the partition which will be used to store that message. If no key is provided then a random partition will be chosen.
 
 5) What are the traditional methods of message transfer? How is Kafka better from them
 -> In Apache Kafka, the traditional method of message transfer has two ways: Queuing: In the queuing method, a pool of consumers may read messages from the server, and each message goes to one of them. Publish-Subscribe: In the Publish-Subscribe model, messages are broadcasted to all consumers.
@@ -90,6 +91,162 @@ properties = {
     'retries': 5,
     'enable.idempotence': 'true'
 }
+
+19) What does 'acks': 'all', property do in kafka
+-> The acks property in Kafka is a producer configuration parameter that denotes the number of brokers that must receive the record before we consider the write as successful. The acks property supports three values: 0, 1, and all. When acks is set to all, all online in-sync replicas must receive the write. If there are less than min.insync.replicas online, then the write won’t be processed. The acks=all setting is the strongest available guarantee that Kafka provides for durability.
+
+20) how does kafka use and increment offsets for multiple partitions..
+-> each partition has different offset handler so for them all, offset starts from 0 and goes up to n.
+Offset only have meaning for a specific partition.
+Offset are not re-used even if previous message is deleted.
+
+    Ex.. Offset 3 in partition 1 does not represent the same data as ofset 3 in partition 2.
+        Topic : Example-topic ----|
+                        Partition-1 -- Offset  0,1,2,3,4,5,6.....n
+                        Partition-2 -- Offset  0,1,2,3,4,5,6.....n
+                        Partition-3 -- Offset  0,1,2,3,4,5,6.....n
+
+Offset never goes backwards.
+
+21) Can we change data written in kafka topic?
+-> kafka topics are immutable, once the data is written on the partition, it can not be changed at all.
+
+22) Does kafka keep data forever?
+-> Kafka stores and keep the data until the retention period, after that, It'll remove them. By default, this period is 1 week.
+
+23) Kafka's delivered messages, are they delivered in the same order as published?
+-> Kafka delivered messages order is gurenteed  only within one partition (Not across partitions).
+
+
+25) Explain the producer's created kafka message architecture and the format of message as well..
+-> Kafka processes the messages in binary format only.
+Usually, it consists of key-value, Conpression type, Headers (Set of Key-values that defines some meta data about message).
+
++------------------KAFKA MESSAGE ARCHITECTURE---------------------+
+|                              |                                  |
+| Key : Binary  (Can be Null)  |   Value : Binary  (Can be Null)  |
+|                              |                                  |
++------------------------------+----------------------------------+
+|                        Compression type                         |
+|                (none, gzip, snappy, lz4, zstd)                  |
++-----------------------------------------------------------------+
+|                        Headers (Optional)                       |
+|                 (Key-value)(Key-value)(Key-value)               |
++-----------------------------------------------------------------+
+|                        Partiion + Offset                        |
+| (Producer decides/knows which partition/offset to store message)|
++-----------------------------------------------------------------+
+|                          Timestamp                              |
+|                     (System or User Set)                        |
++-----------------------------------------------------------------+
+
+Producer Messages ->
+
+Above message is what producer creates and send to kafka in the form of bytes.
+Kafka only accepts bytes as an input from producers and sends only bytes as output to consumers.
+
+Producer serializers 
+
+Kafka producers uses Kafka-Messages-Serializers (Transform object into bytes) which will be applied on key and value.
+So, if key = 123 and value = "Hello World"
+Key -> KeySerializer = IntegerSerializer -> 123 to binary is 01110011
+Value -> ValueSerializer = StringSerializer -> "Hello World" to binary is 01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100
+
+* Common serializers in kafka are
+    * String (JSON too)
+    * Int, Float
+    * Avro
+    * Protobuf
+
+Consumer Messages ->
+
+Consumer read data from a topic (Identified by name) - pull model
+Consumer automatically know which broker to read from
+In case of broker failures, consumers know how to recover
+Data is read in order from low to high offset within each partitions.
+So, the only order is being followed is within each partitions so the order of the messages consumed may or may not be the same as the order of the messages produced in sequence.
+
+Consumer Deserializers
+
+When consumer pulls message from kafka, it knows the type of key and value so accordingly, it uses it's deserializer to deserialize the message key and value from bytes to object.
+
+* Common serializers in kafka are
+    * String (JSON too)
+    * Int, Float
+    * Avro
+    * Protobuf
+
+Note that the serialization/deserialization type must not change during the topic lifecycle (Create a new topic instead).
+
+24) how data is assigned in partitions or how does it determine in which partitiom to store data?
+-> Key hashing is the process used by KafKaPartitioner to determine the mapping of key to a partition so the key of the key-value of the message will determine which partition should be used to store the message.
+Usually, data is assigned randomly across partitions unless the key is provided (Kafka message body consists of key-value pair).
+So, if the key is provided, kafka will hash that key to a number and then choose the partition to store that message. So, everytime, for that key, the same partition will be chosen. If we don't send a key, they key will be set to null and random partition will be taken to store the message.
+Note that kafka producer knows or decides which broker and which partition to store message into and on which offset (pre Incremented) while creating message only.
+
+25) Which algorithm does KafkaPartitioner use to hash the key and value?
+-> murmur2
+
+26) Formula that KafkaPartitioner use to map the partition..
+-> targetPartition = Math.abs(Utils.murmur2(keyBytes)) % (numPartitions - 1)
+
+27) Write kafka cli command to send key-value message with compression type gzip
+-> Below is the command
+>>> kafka-console-producer --topic test --bootstrap-server localhost:9092 --property compression.type=gzip --property parse.key=true --property key.separator=:
+name: VrushankPatel
+
+Consumer will consume the value only so VrushankPatel
+
+
+EXAMPLE
+-----------------------------------------------------------------------------
+>>> kafka-console-producer.sh --bootstrap-server localhost:19092 --topic first-topic --property compression.type=snappy --property parse.key=true --property key.separator=:
+>name: Vrushank
+>age: 24
+>address:Ahmedabad
+>name: Avani
+>name: Geeta
+>age: 90
+>age: 88
+>age: 66
+-----------------------------------------------------------------------------
+If we check the partitions offsets, to understand more about how these produced messages are being stored based on their keys to partitions mapping.
+-----------------------------------------------------------------------------
+
+28) Write kafka command to create topic only if doesn't exist..
+-> Below is the command to do that
+>>> kafka-topics.sh --bootstrap-server localhost:19092 --create --topic {TOPIC_NAME} --partitions 3 --replication-factor 1 --if-not-exists
+
+29) Write kafka command to create topic that has only 10 seconds of retention time.
+->
+>>> kafka-topics.sh --bootstrap-server localhost:9092 --create --topic my-topic-with-short-retention-period --partitions 3 --replication-factor 1 --config retention.ms=10000 --config segment.ms=10000
+
+retention.ms :
+By default, value of this is 7 days. so the data written to kafka topics will get deleted after 7 days.
+
+segment.ms:
+By default, value of this is 7 days.
+This configuration controls the period of time after which Kafka will force the log to roll even if the segment file isn't full to ensure that retention can delete or compact old data.
+
+30) Write kafka command to change topic retention of existing topic..
+->
+>>> kafka-configs.sh --bootstrap-server localhost:19092 --alter --topic first-topic --add-config retention.ms=10000
+
+31) Write kafka command to change number of partitions in existing topic..
+->
+>>> kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic my-first-topic --partitions 5
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
