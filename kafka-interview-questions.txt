@@ -236,6 +236,31 @@ This configuration controls the period of time after which Kafka will force the 
 -> Below is the command
 >>> kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic my-first-topic --partitions 5
 
+32) Say that we have a topic with 3 partitions and we are producing data, a consumer group is created with 3 consumers in it, how will the data be consumed?
+-> Simply, one consumer will consume data from one partition, second will consume data from second partition, third consumer will consume data from third partition.
+
+33) FOLLOWUP QUESTION in the same scenario, what if we add fourth consumer to that consumer group?
+-> the 4th consumer will remain idle and not help the rest of the three consumer to consume data because we have only 3 partitions.
+
+So, if the number of consumers in the consumer group is higher than number of partitions, then only the same number of consumers as number of partitions of the topic will consume the messages, reset will remain idle.
+If we add one more partition then one more consumer will be active and start consuming messages.
+
+34) Consumer group offsets and delivery semantics..
+-> The consumers in a consumer group have exclusive offset (Usually set to 0 when start) and then goes forward as the consumers consume messages one by one. The consumer-group's offset related information gets stored in __consumer_offsets topic of kafka  which is an internal topic.
+kafka stores the values of offsets at which consumer_group is currently reading in the internal topic named __consumer_offsets.
+Once the consumer-group's any consumer consumes any one message, that offset will be incremented and commited in __consumer_offsets topic.
+So, if the consumer group gets down because of some failure or crash, then after starting up again, it'll start consuming messages from the offset it left off.
+
+The commitment of the offsets to the __consumer_offsets topic has 3 delivery semantics.
+1) at least once (Usually preffered) - So, offsets are commited once a message is processed.
+                                     - If the processing of message goes wrong then offset not commited so the same message will be read again.
+                                     - This can result in duplicate processing of messages sometimes so make sure processing is idempotant (Meaning that duplicate processing of same message won't affect your system)
+
+2) at most once : - Offsets are commited as soon as the message is received.
+                  - If the processing of message goes wrong, it will get lost because while receiving them, the offsets are commited so the same messages won't be read again.
+
+3) Exactly once : By implementing idempotant consumer or use transactional API.
+
 
 
 
