@@ -170,7 +170,7 @@ Consumer Deserializers
 
 When consumer pulls message from kafka, it knows the type of key and value so accordingly, it uses it's deserializer to deserialize the message key and value from bytes to object.
 
-* Common serializers in kafka are
+* Common Deserializers in kafka are
     * String (JSON too)
     * Int, Float
     * Avro

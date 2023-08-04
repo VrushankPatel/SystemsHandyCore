@@ -1,7 +1,9 @@
+# Confluent GUI will be available on 9021 port
+# broker will be available on 9092
+
 ---
 version: '2'
 services:
-
   broker:
     # image: confluentinc/cp-kafka:7.4.1
     image: confluentinc/cp-enterprise-kafka:latest
