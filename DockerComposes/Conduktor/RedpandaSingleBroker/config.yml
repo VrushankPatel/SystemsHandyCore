@@ -1,5 +1,5 @@
 organization:
-  name: VRS
+  name: OMEXY
 clusters:
 - id: local
   name: local
@@ -10,5 +10,5 @@ clusters:
     url: http://redpanda-0:18081
     ignoreuntrustedcertificate: false
 admin:
-  email: vrushankofficial@gmail.com
-  password: Vrushank@1998
+  email: admin@admin.io
+  password: admin
