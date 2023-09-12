@@ -334,5 +334,6 @@ How can you optimize Kafka performance for low-latency scenarios?
 Describe the process of Kafka broker discovery in a consumer application.
 What is the purpose of the Kafka MirrorMaker, and how is it used in multi-datacenter setups?
 How can you handle message reprocessing in Kafka without impacting downstream consumers?
-Explain the concept of "Exactly Once Semantics" in Kafka and how it is achieved.
+Explain the concept of "Exactly Once Semantics" in Kafka and how it is achieved?
 What are some best practices for monitoring and managing Kafka in a production environment?
+Are kafka broker and controller different?
