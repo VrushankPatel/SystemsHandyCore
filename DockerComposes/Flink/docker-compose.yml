@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  jobmanager:
+    image: apache/flink:1.14.0-scala_2.12
+    ports:
+      - "8081:8081"  # Expose Flink's WebUI
+    command: jobmanager
+    volumes:
+      - ./jobmanager:/jobmanager  # Mount a volume for JobManager state (optional)
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+
+  taskmanager:
+    image: apache/flink:1.14.0-scala_2.12
+    depends_on:
+      - jobmanager
+    entrypoint: taskmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    volumes:
+      - ./taskmanager:/taskmanager  # Mount a volume for TaskManager state (optional)
