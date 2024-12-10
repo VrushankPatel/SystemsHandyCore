@@ -1,0 +1,14 @@
+organization:
+  name: OMEXY
+clusters:
+- id: local
+  name: local
+  bootstrapservers: redpanda-0:9092
+  labels: {}
+  ignoreuntrustedcertificate: false
+  schemaregistry:
+    url: http://redpanda-0:18081
+    ignoreuntrustedcertificate: false
+admin:
+  email: admin@admin.io
+  password: admin

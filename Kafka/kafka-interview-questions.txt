@@ -1,0 +1,339 @@
+1) What is Apache Kafka1
+-> A messaging system or a message broker
+A streaming platform
+Publish-Subscribe system
+
+2) What do you mean by a Partition in Kafka?
+-> Partitioning is what enables messages to be split in parallel across several brokers in the cluster. 
+Using this method of parallelism, Kafka scales to support multiple consumers and producers simultaneously. 
+This method of partitioning allows linear scaling for both consumers as well as producers
+
+3) Usage of kafka
+-> Event streaming
+Messaging broker
+Activity tracking
+Logs gathering
+Real-time analytics
+Metrics collections
+Event Bus for reactive microservices
+
+4) What are the major components of Kafka?
+-> Kafka Producer. The producer acts as a message sender.
+Kafka Consumer. The consumer acts as the message receiver. ...
+Kafka Broker. The Kafka Broker is nothing but just a running instance of kafka server. ...
+Kafka Cluster. A Kafka cluster is a system that consists of several Brokers, Topics, and Partitions for both. 
+Kafka Topic. Assume it like a table in database, we have topic in kafka but it can't be queried like table in db. Kafka topics are the categories used to organize messages.
+Kafka Partitions. messages to be split in parallel across several brokers in the cluster
+Offsets. like an index in database. The offset is a unique ID assigned to the partitions, which contains messages. 
+Consumer Groups. Multiple consumers from same group consuming the data by sharing the load so that they all consume unique data only.
+KafkaPartitioner: KafkaPartitioner hashes the key and value of the message and based on the hash, it maps the key to the partition which will be used to store that message. If no key is provided then a random partition will be chosen.
+
+5) What are the traditional methods of message transfer? How is Kafka better from them
+-> In Apache Kafka, the traditional method of message transfer has two ways: Queuing: In the queuing method, a pool of consumers may read messages from the server, and each message goes to one of them. Publish-Subscribe: In the Publish-Subscribe model, messages are broadcasted to all consumers.
+Kafka provides both the methods implementations but also, comes with rich features of compression and batching of the data that need to be produced.
+Also, immutable topics that can not be queried, retention policy for the data that gets stored in kafka broker, Streams and connect API make kafka even better than the rest of the tools available in the industry.
+
+6) Layers of kafka
+-> Compute layer and storage Layer
+
+7) Explain the four core API architecture that Kafka uses.
+-> Producer and Consumer APIs
+The foundation of Kafka’s powerful application layer is two primitive APIs for accessing the storage—the producer API for writing events and the consumer API for reading them. On top of these are APIs built for integration and processing.
+
+Kafka Connect
+Kafka Connect, which is built on top of the producer and consumer APIs, provides a simple way to integrate data across Kafka and external systems. Source connectors bring data from external systems and produce it to Kafka topics. Sink connectors take data from Kafka topics and write it to external systems.
+
+Kafka Streams
+For processing events as they arrive, we have Kafka Streams, a Java library that is built on top of the producer and consumer APIs. Kafka Streams allows you to perform real-time stream processing, powerful transformations, and aggregations of event data.
+
+ksqlDB
+Building on the foundation of Kafka Streams, we also have ksqlDB, a streaming database which allows for similar processing but with a declarative SQL-like syntax.
+
+8) what is zookeeper and why kafka uses it?
+-> zookeeper is a key-value store that comes with consensous algorithm implementation inbuilt in it. Kafka stores it's meta data (specially offset tracking data) in zookeeper and also, uses zookeeper's consensous algorithm to elect leader broker incase it dies.
+
+In other words, Zookeeper is used for metadata management in the Kafka world. For example: Zookeeper keeps track of which brokers are part of the Kafka cluster. Zookeeper is used by Kafka brokers to determine which broker is the leader of a given partition and topic and perform leader elections.
+
+9) Can we use kafka without zookeeper?
+-> Yes, we can do that. Nowadays, kafka is shipped with KRaft in it so leader election can be done without ZK. Also, we have to change the configuration of broker so that rather than storing metadata in zookeeper, kafka will create a topic for itself and will store the metadata in it.
+
+10) Explain the concept of Leader and Follower in Kafka.
+-> Leader: The replica that all requests from clients and other brokers of Kafka go to it. Each partition can only have one leader at a time. Follower: Other replicas that are not the leader. In-sync replica: replicas that frequently request for latest messages are considered in-sync.
+
+11) Why is Topic Replication important in Kafka? What do you mean by ISR in Kafka?
+-> Topic replication in Kafka means that data is written to not just one broker, but many. This improves the resilience and availability of the data in case of broker failures. The replication factor is a topic setting that determines how many copies of the data are maintained.
+
+12) What do you understand about a consumer group in Kafka?
+-> A consumer group is a set of consumers which cooperate to consume data from some topics. The partitions of all the topics are divided among the consumers in the group. As new group members arrive and old members leave, the partitions are re-assigned so that each member receives a proportional share of the partitions.
+
+13) How is kafka fault tolerent?
+-> Kafka is a fault-tolerant system that can continue operating without interruption when one or more of its components fail. Kafka achieves fault tolerance by replicating the partition data to other brokers. The replication factor is a configuration that specifies how many copies of the partition are needed, and it can be set at the topic level. Streams and tables are also fault tolerant because their data is stored reliably and durably in Kafka1. Thus, Kafka implements fault tolerance by applying replication to the partitions. We can define replication factor at the Topic level. We don’t set a replication factor of partitions, we set it for a Topic, and it applies to all partitions within the Topic2. Kafka provides configuration properties in order to handle adverse scenarios3.
+
+14) How does kafka handle data retention?
+-> Kafka provides a time-based retention policy that can be configured at the topic level. When a producer sends a message to Kafka, it appends it in a log file and retains it for a configured duration. With retention period properties in place, messages have a TTL (time to live). Upon expiry, messages are marked for deletion, thereby freeing up the disk space. The same retention period property applies to all messages within a given Kafka topic. Furthermore, we can set these properties either before topic creation or alter them at runtime for a pre-existing topic1.
+
+15) How to use kafka without zookeeper?
+-> To configure and use Kafka without Zookeeper, you can use Kafka Raft metadata mode (KRaft) 1. In KRaft, the Kafka metadata information will be stored as a partition within Kafka itself. There will be a KRaft Quorum of controller nodes which will be used to store the metadata. The metadata will be stored in an internal Kafka topic @metadata 1. The KRaft controllers collectively form a Kraft quorum, which stores all the metadata information regarding Kafka clusters 2. With this method, you eradicate the dependency of Zookeeper within Kafka environment architecture 2. You can follow the steps mentioned in this tutorial to install Kafka without Zookeeper.
+
+16) What is idempotancy in distributed systems?
+-> In distributed systems, an operation is said to be idempotent if running it multiple times has the same effect as running it once. Idempotency is an important concept in data engineering, particularly when working with distributed systems or databases. In a distributed system, multiple nodes may be executing the same operation concurrently. If the operation is not idempotent, this can lead to inconsistent results, as different nodes may end up with different outcomes12. Idempotency is a key building block in distributed systems because exactly-once delivery in distributed systems is impossible to achieve.
+
+17) What is the purpose of idempotant producer in kafka?
+-> The purpose of an idempotent producer in Kafka is to ensure that messages published on Kafka topics should not be duplicated from the producer side. It is a feature that ensures that a message must be persisted to the Kafka topic only once, even if the producer must retry requests upon failures. This feature is enabled by setting the enable.idempotence property to true in the producer configuration. With this feature enabled, Kafka ensures that duplicates are not introduced due to unexpected retries. The default value of enable.idempotence is false.
+
+18) How to create idempotant producer in kafka?
+-> To create an idempotent producer in Kafka, you can set the enable.idempotence property to true in the producer configuration1. When enable.idempotence is set to true, each producer gets assigned a Producer Id (PID) and the PID is included every time a producer sends messages to a broker. Additionally, each message gets a monotonically increasing sequence number (different from the offset - used only for protocol purposes). A separate sequence is maintained for each topic partition that a producer sends messages to. On the broker side, on a per partition basis, it keeps track of the largest PID-Sequence Number combination that is successfully written. When a lower sequence number is received, it is discarded1. With this feature enabled, Kafka ensures that duplicates are not introduced due to unexpected retries 1. The default value of enable.idempotence is false 2. Here’s an example of how to enable idempotence in Kafka:
+
+# create Producer properties
+properties = {
+    'bootstrap.servers': 'localhost:9092',
+    'acks': 'all',
+    'retries': 5,
+    'enable.idempotence': 'true'
+}
+
+19) What does 'acks': 'all', property do in kafka
+-> The acks property in Kafka is a producer configuration parameter that denotes the number of brokers that must receive the record before we consider the write as successful. The acks property supports three values: 0, 1, and all. When acks is set to all, all online in-sync replicas must receive the write. If there are less than min.insync.replicas online, then the write won’t be processed. The acks=all setting is the strongest available guarantee that Kafka provides for durability.
+
+20) how does kafka use and increment offsets for multiple partitions..
+-> each partition has different offset handler so for them all, offset starts from 0 and goes up to n.
+Offset only have meaning for a specific partition.
+Offset are not re-used even if previous message is deleted.
+
+    Ex.. Offset 3 in partition 1 does not represent the same data as ofset 3 in partition 2.
+        Topic : Example-topic ----|
+                        Partition-1 -- Offset  0,1,2,3,4,5,6.....n
+                        Partition-2 -- Offset  0,1,2,3,4,5,6.....n
+                        Partition-3 -- Offset  0,1,2,3,4,5,6.....n
+
+Offset never goes backwards.
+
+21) Can we change data written in kafka topic?
+-> kafka topics are immutable, once the data is written on the partition, it can not be changed at all.
+
+22) Does kafka keep data forever?
+-> Kafka stores and keep the data until the retention period, after that, It'll remove them. By default, this period is 1 week.
+
+23) Kafka's delivered messages, are they delivered in the same order as published?
+-> Kafka delivered messages order is gurenteed  only within one partition (Not across partitions).
+
+
+25) Explain the producer's created kafka message architecture and the format of message as well..
+-> Kafka processes the messages in binary format only.
+Usually, it consists of key-value, Conpression type, Headers (Set of Key-values that defines some meta data about message).
+
++------------------KAFKA MESSAGE ARCHITECTURE---------------------+
+|                              |                                  |
+| Key : Binary  (Can be Null)  |   Value : Binary  (Can be Null)  |
+|                              |                                  |
++------------------------------+----------------------------------+
+|                        Compression type                         |
+|                (none, gzip, snappy, lz4, zstd)                  |
++-----------------------------------------------------------------+
+|                        Headers (Optional)                       |
+|                 (Key-value)(Key-value)(Key-value)               |
++-----------------------------------------------------------------+
+|                        Partiion + Offset                        |
+| (Producer decides/knows which partition/offset to store message)|
++-----------------------------------------------------------------+
+|                          Timestamp                              |
+|                     (System or User Set)                        |
++-----------------------------------------------------------------+
+
+Producer Messages ->
+
+Above message is what producer creates and send to kafka in the form of bytes.
+Kafka only accepts bytes as an input from producers and sends only bytes as output to consumers.
+
+Producer serializers 
+
+Kafka producers uses Kafka-Messages-Serializers (Transform object into bytes) which will be applied on key and value.
+So, if key = 123 and value = "Hello World"
+Key -> KeySerializer = IntegerSerializer -> 123 to binary is 01110011
+Value -> ValueSerializer = StringSerializer -> "Hello World" to binary is 01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100
+
+* Common serializers in kafka are
+    * String (JSON too)
+    * Int, Float
+    * Avro
+    * Protobuf
+
+Consumer Messages ->
+
+Consumer read data from a topic (Identified by name) - pull model
+Consumer automatically know which broker to read from
+In case of broker failures, consumers know how to recover
+Data is read in order from low to high offset within each partitions.
+So, the only order is being followed is within each partitions so the order of the messages consumed may or may not be the same as the order of the messages produced in sequence.
+
+Consumer Deserializers
+
+When consumer pulls message from kafka, it knows the type of key and value so accordingly, it uses it's deserializer to deserialize the message key and value from bytes to object.
+
+* Common Deserializers in kafka are
+    * String (JSON too)
+    * Int, Float
+    * Avro
+    * Protobuf
+
+Note that the serialization/deserialization type must not change during the topic lifecycle (Create a new topic instead).
+
+24) how data is assigned in partitions or how does it determine in which partitiom to store data?
+-> Key hashing is the process used by KafKaPartitioner to determine the mapping of key to a partition so the key of the key-value of the message will determine which partition should be used to store the message.
+Usually, data is assigned randomly across partitions unless the key is provided (Kafka message body consists of key-value pair).
+So, if the key is provided, kafka will hash that key to a number and then choose the partition to store that message. So, everytime, for that key, the same partition will be chosen. If we don't send a key, they key will be set to null and random partition will be taken to store the message.
+Note that kafka producer knows or decides which broker and which partition to store message into and on which offset (pre Incremented) while creating message only.
+
+25) Which algorithm does KafkaPartitioner use to hash the key and value?
+-> murmur2
+
+26) Formula that KafkaPartitioner use to map the partition..
+-> targetPartition = Math.abs(Utils.murmur2(keyBytes)) % (numPartitions - 1)
+
+27) Write kafka cli command to send key-value message with compression type gzip
+-> Below is the command
+>>> kafka-console-producer --topic test --bootstrap-server localhost:9092 --property compression.type=gzip --property parse.key=true --property key.separator=:
+name: VrushankPatel
+
+Consumer will consume the value only so VrushankPatel
+
+
+EXAMPLE
+-----------------------------------------------------------------------------
+>>> kafka-console-producer.sh --bootstrap-server localhost:19092 --topic first-topic --property compression.type=snappy --property parse.key=true --property key.separator=:
+>name: Vrushank
+>age: 24
+>address:Ahmedabad
+>name: Avani
+>name: Geeta
+>age: 90
+>age: 88
+>age: 66
+-----------------------------------------------------------------------------
+If we check the partitions offsets, to understand more about how these produced messages are being stored based on their keys to partitions mapping.
+-----------------------------------------------------------------------------
+
+28) Write kafka command to create topic only if doesn't exist..
+-> Below is the command to do that
+>>> kafka-topics.sh --bootstrap-server localhost:19092 --create --topic {TOPIC_NAME} --partitions 3 --replication-factor 1 --if-not-exists
+
+29) Write kafka command to create topic that has only 10 seconds of retention time.
+-> Below is the command
+>>> kafka-topics.sh --bootstrap-server localhost:9092 --create --topic my-topic-with-short-retention-period --partitions 3 --replication-factor 1 --config retention.ms=10000 --config segment.ms=10000
+
+retention.ms :
+By default, value of this is 7 days. so the data written to kafka topics will get deleted after 7 days.
+
+segment.ms:
+By default, value of this is 7 days.
+This configuration controls the period of time after which Kafka will force the log to roll even if the segment file isn't full to ensure that retention can delete or compact old data.
+
+30) Write kafka command to change topic retention of existing topic..
+-> Below is the command
+>>> kafka-configs.sh --bootstrap-server localhost:19092 --alter --topic first-topic --add-config retention.ms=10000
+
+31) Write kafka command to change number of partitions in existing topic..
+-> Below is the command
+>>> kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic my-first-topic --partitions 5
+
+32) Say that we have a topic with 3 partitions and we are producing data, a consumer group is created with 3 consumers in it, how will the data be consumed?
+-> Simply, one consumer will consume data from one partition, second will consume data from second partition, third consumer will consume data from third partition.
+
+33) FOLLOWUP QUESTION in the same scenario, what if we add fourth consumer to that consumer group?
+-> the 4th consumer will remain idle and not help the rest of the three consumer to consume data because we have only 3 partitions.
+
+So, if the number of consumers in the consumer group is higher than number of partitions, then only the same number of consumers as number of partitions of the topic will consume the messages, reset will remain idle.
+If we add one more partition then one more consumer will be active and start consuming messages.
+
+34) Consumer group offsets and delivery semantics..
+-> The consumers in a consumer group have exclusive offset (Usually set to 0 when start) and then goes forward as the consumers consume messages one by one. The consumer-group's offset related information gets stored in __consumer_offsets topic of kafka  which is an internal topic.
+kafka stores the values of offsets at which consumer_group is currently reading in the internal topic named __consumer_offsets.
+Once the consumer-group's any consumer consumes any one message, that offset will be incremented and commited in __consumer_offsets topic.
+So, if the consumer group gets down because of some failure or crash, then after starting up again, it'll start consuming messages from the offset it left off.
+
+The commitment of the offsets to the __consumer_offsets topic has 3 delivery semantics.
+1) at least once (Usually preffered) - So, offsets are commited once a message is processed.
+                                     - If the processing of message goes wrong then offset not commited so the same message will be read again.
+                                     - This can result in duplicate processing of messages sometimes so make sure processing is idempotant (Meaning that duplicate processing of same message won't affect your system)
+
+2) at most once : - Offsets are commited as soon as the message is received.
+                  - If the processing of message goes wrong, it will get lost because while receiving them, the offsets are commited so the same messages won't be read again.
+
+3) Exactly once : By implementing idempotant consumer or use transactional API.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+====
+What is Apache Kafka, and what is its primary use case?
+Explain the key components of Kafka architecture.
+What is a Kafka topic, partition, and offset?
+How does Kafka ensure fault tolerance and high availability?
+What is the role of ZooKeeper in Kafka?
+What are producers and consumers in Kafka? How do they communicate with Kafka?
+How does Kafka handle message retention and cleanup?
+What is the purpose of a Kafka Connect, and how does it work?
+How do you achieve load balancing of consumers in a Kafka cluster?
+What is the significance of the consumer group in Kafka?
+What is the difference between a Kafka broker and a Kafka consumer?
+How does Kafka guarantee message ordering within a partition?
+Can a Kafka topic have multiple consumers belonging to different consumer groups? Explain how it affects message delivery.
+How do you handle schema evolution in Kafka when dealing with Avro or JSON data?
+What are some key considerations when deciding the number of partitions for a Kafka topic?
+How do you monitor Kafka cluster health and performance?
+Explain the concept of log compaction in Kafka.
+How can you ensure that a message is processed exactly once in Kafka, even in the face of failures?
+What is the role of a Kafka Schema Registry?
+How can you secure Kafka in a production environment?
+What is Apache Kafka? What are its main components?
+Explain what partitions and topics are in Kafka. How are they related?
+What is a Kafka broker? What are its responsibilities?
+What is a Kafka producer? How does it work?
+What is a Kafka consumer? How does it work?
+What is the role of Zookeeper in a Kafka cluster?
+What is the architecture of a Kafka cluster?
+How does Kafka provide high availability and fault tolerance?
+What is the role of offsets in Kafka? How are they used?
+How does Kafka handle data replication? What is the replication factor?
+Explain Kafka's retention and log compaction. How do they work?
+How does Kafka achieve high throughput and low latency?
+What delivery semantics does Kafka provide? (at most once, at least once, exactly once)
+What are some use cases where Kafka is commonly used?
+How is Kafka different from other message queues like RabbitMQ or ActiveMQ?
+What are some challenges when using Kafka? How would you troubleshoot issues?
+What is the role of the Kafka Controller in a Kafka cluster, and how does it function?
+How does Kafka handle data retention, and what factors might influence your retention policy?
+Explain the concept of Kafka message serialization and deserialization. Why is it essential?
+What are the different types of Kafka APIs, and in what scenarios would you use each of them?
+How can you handle consumer lag in Kafka, and why is it crucial to monitor and manage it?
+Describe the Kafka log compaction process and its benefits.
+How does Kafka handle data distribution and rebalancing across brokers?
+Explain the concept of idempotent producers in Kafka. How can you ensure idempotency?
+What are the key differences between Kafka and other messaging systems like RabbitMQ or ActiveMQ?
+How can you guarantee message delivery to Kafka in the case of network or node failures?
+Describe the role of Apache Avro in Kafka and how it facilitates schema evolution.
+What is the use of the Kafka Streams library, and how does it differ from Kafka Connect?
+How does the Kafka Producer achieve high throughput and fault tolerance?
+Explain the process of data replication in a Kafka cluster.
+How can you optimize Kafka performance for low-latency scenarios?
+Describe the process of Kafka broker discovery in a consumer application.
+What is the purpose of the Kafka MirrorMaker, and how is it used in multi-datacenter setups?
+How can you handle message reprocessing in Kafka without impacting downstream consumers?
+Explain the concept of "Exactly Once Semantics" in Kafka and how it is achieved?
+What are some best practices for monitoring and managing Kafka in a production environment?
+Are kafka broker and controller different?
