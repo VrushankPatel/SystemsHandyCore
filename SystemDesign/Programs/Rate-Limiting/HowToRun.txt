@@ -1,0 +1,10 @@
+open cmd or terminal and run server.js by 
+    > node server.js
+
+Now open another terminal or cmd and curl as below (replace {YOUR_NAME} by your name)
+    > curl -H 'user={YOUR_NAME}' localhost:3000/index.html 
+    OR
+Open your favourite browser and open this url : http://localhost:3000/index.html?user=vrushank
+
+now, in both the cases, you'll get Hello world, but only once in 5 seconds.
+In 5 seconds, if you issue another request, it'll return an error 429 and say "Too many requests".

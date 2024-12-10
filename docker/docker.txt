@@ -1,0 +1,870 @@
+# Docker basics
+
+# Docker : Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
+# You can create image or bundle image of your deployment files and configuration, which is platform-free and can be used in any platform.
+# and then you can ship that image anywhere (Any machine) to deploy.
+
+# Visit Docker Hub and create account there to interact with docker registry.
+
+# to login to docker hub via command line.
+>> docker login
+
+# to logout from docker hub via command line.
+>> docker logout
+
+# to get the info about docker version, driver, server, containers and many more things about docker.
+>> docker info
+
+# to get docker version, goLang version, api version and other techno-stack versions.
+>> docker version
+
+# to get only docker version
+>> docker -v
+OR
+>> docker --version
+
+# to get information about docker, server, containers, images, it's drivers etc.
+>> docker info
+
+# for docker topics help
+>> docker --help
+
+# Docker image : Docker images are the templates used to create Docker containers.
+# Docker images are stored in docker registry (Docker hub registry).
+# A Docker image is a read-only template that contains a set of instructions for creating a container that can run on the Docker platform. 
+# It provides a convenient way to package up applications and preconfigured server environments, which you can use for your own private use or share publicly with other Docker users.
+
+# Docker Container : Container is  a running instance of an docker image.
+OR
+# Docker container : Container is something, on which docker image runs.
+OR 
+# Docker Container : Docker provides the ability to package and run an application in a loosely isolated environment called a container.
+# Containers are isolated from one another and bundle their own software, libraries and configuration files; they can communicate with each other through well-defined channels.
+
+# if we want help for specific docker command
+>> docker images --help
+OR
+>> docker run --help
+
+# to get all the docker images we've in our machine
+>> docker images
+
+# to get any docker image from docker hub, we've to get that image's name from it's repository and then we can use docker pull command to pull image.
+# here, let's try for ubuntu server. we'll grab ubuntu's image from docker hub. image name is ubuntu. so, the command is...
+>> docker pull ubuntu
+# it'll pull the ubuntu image.
+# there might be multiple versions of ubuntu in ubuntu's docker registry or repository.
+# by default, it'll pull latest version.
+
+# let's assume thet we need version 18.04 of ubuntu docker image, which we've to pull.
+# for that, we've to use tag to show the exact version of image. version of images is available in that image's registry in docker hub.
+# let's retrieve 18.04 version of ubuntu image.
+>> docker pull ubuntu:18.04
+# it'll pull 18.04 versioned image of ubuntu.
+
+# to explore docker public repositories, try https://hub.docker.com/search?q=&type=image
+
+# image's name and tag syntax look like this -->  {image_name}:{tag}
+# by default tag is latest, so here in our case, name and tag will be like --> ubuntu:latest
+
+# now, we've cloned one docker image named ubuntu:latest, let's check it's id.
+# with docker images command, -q (quite mode flag) flag will return the image id.
+>> docker images -q
+# if we've cloned only one docker image, it'll show it's id, copy the id because we're going to use it.
+
+# if we want to get all the details about images, then insted of using -q flag, use -a flag, that means all details.
+>> docker images -a
+
+# if we want to filter images, then we can use -f flag.
+>> docker images -f "dangling=true"
+# it'll show all the dangling images, dangling images are the images, which are not used atleast once and not assiciated with any running containers are known as dangling images.
+
+# we can use the filter with quite mode, we can use them together.
+>> docker images -f "dangling=false" -q
+# it'll show all the non-dangling image's ids.
+
+# to remove the image, we can use rmi command which means remove image. copy the ubuntu image id by getting it via -q flag, and use it here.
+>> docker rmi {ubuntu_image_id}
+{In_My_Case}[> docker rmi f643c72bc252]
+
+# to remove all images, we can use below trick.
+>> docker rmi $(docker images -aq)  
+OR
+>> docker image rm $(docker images -aq)  
+# if it gives error because of image is in use, then stop or remove the container that is running that image and try again.
+
+OR we can use rm with docker image and pass image name or Id
+>> docker image rm {ubuntu_image_id OR ubuntu_image_name}
+
+# also, we can pass multiple images to delete in rm.
+# Ex. docker image rm image1 image2 image3
+
+# now, try to retrieve all the images again, you'll notice that docker image of ubuntu is no longer there.
+
+# we might have some images unused and uncontainerized, these are called dangling images.
+# to remove all dangling images, we can use prune.
+>> docker image prune
+# press yes after this command, and it will remove all the dangling images.
+
+# docker images run in the docker containers.
+# we've docker ps command for containers, check that command flags and description by..
+>> docker ps --help
+
+# ps is used to show all the containers.
+>> docker ps
+# it'll list all the running containers, if you've one.
+# if you want to see the containers those are not running currently, then append above command with -a flag.
+>> docker ps -a
+# it'll show you the stopped and terminated containers as well.
+
+# to check the pulled image, we can use inspect command of docker.
+>> docker inspect ubuntu
+# it'll show all the information of ubuntu image like it's tags, RepoTags, DataDirs, GraphDriver, Root FileSystem, MetaData, virtual size, ContainerConfig etc.
+
+# let's run an image for demo, we just deleted ubuntu image to learn rmi command. pull that image again.
+# here, we'll deal with ubuntu server image, we want to use it like a ubuntu machine. 
+# so, we want to interact with ubuntu terminal here. for that, we've to use run command's -i and -t flag.
+# check the run command of docker by --help after it, you can see -i is interactive mode and -t is to allocate pseudo tty.
+# so, combine -i and -t means -it, we've to use -it.
+>> docker run -it ubuntu
+# above command will run ubuntu server and bring you to the ubuntu terminal.
+
+# if we want to give the container a name, then we can provide name with run command by --name flag.
+>> docker run --name MyUbuntuContainer -it ubuntu bash
+# in above query, we passed container name as MyUbuntuContainer. 
+# And, after image name, we've passed the shell's mode of ubuntu which is bash, we can pass bash, dash etc.
+
+# now, ubuntu image is running, and you're inside the terminal of that running docker ubuntu-server image.
+# so, basically docker image is running in some docker container.
+# to check the running container, we've to open another terminal or cmd.
+# open other terminal or cmd, and run the ps command.
+>> docker ps
+# it'll show you the running container where ubuntu image is running.
+
+# copy the container ID from the details of container where ubuntu image is running.
+# we can now start and stop the running of ubuntu image by that container id directly.
+
+# in this case, our container is already running in other terminal. let that terminal as it is.
+# in the new terminal, let's stop the ubuntu container by stop command of docker.
+>> docker stop {container_id}
+OR
+>> docker stop {Container_Name}
+# now, go back to ubuntu terminal, you can see the exit command is automatically inserted and ubuntu server is now stopped because we just stopped it's container.
+# similarly, to start the same container...
+>> docker start {container_id}
+OR
+>> docker start {Container_Name}
+# now, if you start the ubuntu container again, then it'll start in the background, you'll not be connected to ubuntu image's -it mode.
+# you've to attach to that container's running session. for that, you can use attach command.
+>> docker attach {container_id}
+OR
+>> docker attach {Container_Name}
+
+# to temporarily stop container or to pause the container... use pause command.
+# first start the container or run image of ubuntu with interactice mode of bash, then try below command.
+>> docker pause {container_id}
+OR
+>> docker pause {Container_Name}
+# after running this command, check the terminal where the ubuntu image is running in -it mode, you'll not able to pass any command there, because it is paused.
+# We've to unpause that container. for that, use unpause command.
+>> docker unpause {container_id}
+OR
+>> docker unpause {Container_Name}
+# now check the terminal where ubuntu session of image is running, it should back in active mode or in the nutshell, resumed.
+
+# now, docker stop command gracefully shutdown the docker image, for here, it inserted exit command, and shut downed the running instance of ubuntu image.
+# But, what if, ubuntu instance is busy in some other process, in that case, stop command will wait to release that execution thread, and then stop it.
+# But here, we want to terminate the existing process and stop it, for that, kill command can be used as given below.
+>> docker kill MyUbuntu
+# now, check the terminal where ubuntu image instance was running, you'll notice that instance is terminated without insertion of exit command.
+
+# so, the difference between stop and kill is stop command stop the process and insert exit command for gracefully shutdown, where kill command just terminate the instance (just like we used to plug out the cable of computers incase of hanging.😂)
+
+# to remove the container, we can use rm command.
+>> docker rm {container_id}
+OR
+>> docker rm {Container_Name}
+
+# To delete all the containers from our machine, try below command, and understand it properly.
+>> docker container rm $(docker container ls –aq)
+# "$(docker container ls –aq)" will return all the container's id. and rm will remove them one by one.
+
+# to remove all the stopped and unused containers, we can use prune command.
+>> docker container prune
+# press yes and all the stopped containers will be removed
+
+# while running image, if we don't provide name to container, docker will pick a random name (Try it 😉).
+
+# now, run the {docker run -it ubuntu} command again in old terminal, you can give the name of the container if you want.
+# we'll see the docker stats console monitor now.
+# while the ubuntu image is running, open the another terminal, and use below command.
+>> docker stats
+# it'll show you the docker's all the running containers, their allocated memory (usage), limit of memory etc.
+# this is continous monitor, use Ctrl+C to exit from it.
+
+# to see the stats of specific container, append above command by container name.
+>> docker stats {container_id}
+OR
+>> docker stats {Container_Name}
+
+# exit from the docker stats by Ctrl+C, and enter below command to check the system-docker related info.
+>> docker system df
+# it'll show you number of images, containers, any of active of them, size, reclaimable or not etc.
+
+# to display the running processes of a container, we can use top command of the docker
+>> docker top {container_id}
+OR
+>> docker top {Container_Name}
+
+# dangling images : docker images which are not used atleast once and not associated with any running containers are known as dangling images.
+# there is docker system prune command, but be careful while using this one, it can remove all the dangling images and all stopped containers.
+# first of all, check what that command does by docker system prune --help.
+# there are two main flags for it, one is -a, which can remove all the non containerized images not just dangling images.
+# and second flag is -f, which can forcefully remove the images, so, it'll not ask you to confirm about deleting the images, it'll just delete is forcefully.
+>> docker system prune
+# it'll ask you for confirmation by y/N
+# choose your option y or n and check the images and containers to check if it worked or not.
+# if container is not removed, you've to stop it first and then try prune.
+
+# ubuntu image might not be deleted by above command, because it is not dangling image, we've used it atleast once or twise.
+# to remove all the non containerized images, we've to use -a flag.
+>> docker system prune -a
+# press y to confirm and then check the images, ubuntu image should've deleted.
+
+# to check the history of particular image, we can use history command in docker.
+>> docker history {image_name}
+{In_My_Case}[> docker history ubuntu 😄]
+
+# Now, there is one thing needed to be understand that everything that docker runs from image to container, is a in-memory execution.
+# once you stop docker instance and run it again with new container, all the old files configured with image and container will be lost.
+# So, let's try this with example.
+# Jenkins and Teamcity are the CI/CD tool, that provides functionality to continously integrate and deliver the updates that we develop.
+# Both of them are standalone servers, and their docker image is available on docker hub.
+# We'll try Jenkins here, but you can try teamcity if you want.
+
+# Let's pull jenkins image first.
+# jenkin's latest tagged image was not on manifest of registry, so i'll pull the latest image by it's version number.
+>> docker pull jenkins:2.60.3
+
+# now, jenkins use 2 ports, one is 8080, where we use web gui from browser, and another is 50000, where jenkins API exposes.
+# when we run jenkins image, it'll run jenkins on ports 8080 and 50000 of container (consider it as a kind of VM).
+# we can't access jenkins on 8080 and 50000 of our machine, so we've to forward the port of container to our machine's port.
+# let's assume that we want to forward port 8080 of container to port 1111 of our machine.
+# and we want to forward port 50000 of container to port 2222 of our machine.
+# then, we can specify the ports by -p flag after run command. then we've to use syntax like given below.
+# ==> -p {OUR_MACHINE_PORT}:{CONTAINER_PORT} -p {OUR_MACHINE_PORT}:{CONTAINER_PORT}
+# in this case ==> -p 1111:8080 -p 2222:50000
+
+# to run jenkins as we described above, use below command.
+>> docker run -p 1111:8080 -p 2222:50000 jenkins:2.60.3
+# Now, you'll able to access jenkins on port 1111 on browser. check the logs of above command, at the end, it'll provide a hex coded password.
+# copy that password, because you'll need it to access jenkins. access localhost:1111, use the copied password as administrator password.
+# in there, it'll ask you to install plugins, choose "install selected plugins", then select none of the plugins (0 plugins) and choose install => save => next.
+# once, you're inside jenkins, create one demo project without configuration. this project will be stored in the file system of running container.
+
+# Now, get container id by (docker ps -aq), stop the container by stop command and container id, start the container by docker start command and container's id again.
+>> docker ps -aq
+>> docker stop {container_id}
+>> docker start {container_id}
+# you can still access jenkins again on 1111, and you can use previously copied password and admin as user, and you'll see your demo project is still there.
+
+# now, stop that container, so the jenkins will be stopped. and delete the container by rm command and container id (docker ps -aq). 
+>> docker stop {container_id}
+>> docker rm {container_id}
+# Now run the same docker image by docker run command, and try to access jenkins at port 1111. you'll see everything is now resetted.
+# you've to use new admin password from log, you've to reinstall plugins, and you'll notice that your demo project is now gone.
+
+# basically, whenever we change or remove the container, docker remove all it's data. we need some persistance storage solution to store the data of running image.
+# we can use our local machine's path to store those data from image to our machine. we can pass -v (volume) flag to connect two paths, one side is our machine's path, other side is container's path.
+# in this case, we'll connect our desired path to jenkins_home path of container.
+# syntax => -v {Our_Path}:{/var/jenkins_home}
+# /var/jenkins_home is the path where jenkins stores it's data. So now, jenkins will store the data at our desired directory.
+
+# jenkin's official registry on docker hub says that, you should run the jenkins something like givn below.
+>> docker run -p 8080:8080 -p 50000:50000 -v {Your_Path_For_Jenkins_Data}:/var/jenkins_home jenkins:2.60.3
+# which is right, that's how we can use persistent storage for jenkins over docker.
+
+# Bind Mount : Here, we'll provide our directory to store data from container which is called bind mount.
+# In my case, I'll use the jenkins named folder located in desktop in my mac, so, i'll use that path.
+>> docker run -p 8080:8080 -p 50000:50000 -v /Users/vrushankpatel/desktop/jenkins:/var/jenkins_home jenkins:2.60.3
+# Now, all the files of jenkins will be stored in the jenkins folder located in desktop in my case, you should check your directory that you specified.
+# now, once jenkins is online, copy the password from log again and access gui at 8080, setup everything and create demo job in there.
+# now stop the container, delete the container, and restart everything by above docker run command which will run everything again with new container.
+# now, if you access port 8080, you've to login by admin and past copied password and then, you'll see nothing is lost, everything that you setup earlier and that demo job is as it is since we're using persistant storage.
+
+# in above case, we used our local machine's path to store jenkins data.
+# in the future, we might need to use multiple servers like jenkins, teamcity etc. we can not use different directories like this to persist the storage because it will be a bit messy.
+# we've to store all the docker specific files in some specific location of machine.
+# to create and manage that storage, docker provides the functionality of docker volumes.
+# if we create docker volume, it'll create that named directory somewhere in our machine (Path is different for different OS), which can be used for image-containers running (persist storage).
+
+# let's create a volume for jenkins server.
+>> docker volume create myjenkins
+# it'll create volume named myjenkins.
+
+# to list all the volumes.
+>> docker volume ls
+# our new volume will be appear there.
+
+# now, we'll use this new volume for the docker run command of jenkins.
+# Syntax : -v {volume_name}:/var/jenkins_home
+>> docker run -p 8080:8080 -p 50000:50000 -v myjenkins:/var/jenkins_home jenkins:2.60.3
+# now, it'll run jenkins and persist it's storage in our new volume myjenkins.
+# here, we basically mounted our myjenkins volume to /var/jenkins_home dir of container os, so any change from myjenkins volume's dir will reflect in container os's /var/jenkins_home directory immediately.
+
+# if we want to know, where that docker volume is mounted, we can inspect it in other terminal.
+>> docker volume inspect myjenkins
+# it'll show you where is it mounted, when it was created and etc.
+
+# to delete volume,
+>> docker volume rm myjenkins
+
+# to delete all unused volumes,
+>> docker volume prune
+
+# to inspect the running container, we can inspect that also.
+>> docker inspect (container_id)
+OR
+>> docker inspect (Container_Name)
+# it'll show you when it was created, where is it's volume mounted and other metadata.
+
+# How to create our own docker image ?
+# We have to create Dockerfile (without any extension) to build our own image.
+# create Dockerfile in somewhere in your pc's folder, open cmd or terminal in it.
+# here is a sample body of Dockerfile, read it carefully and build your image also by editing Dockerfile.
+###
+    # first of all, we've to import our base image, for that, we have FROM keyword.
+    # We're using ubuntu base image here, but if you don't want to use any prebuilt image, then you can try SCRATCH.
+    # FROM SCRATCH means no base image, just start from scratch to create our own platform image.
+    FROM ubuntu
+
+    # if you want to show the maintainer of docker image, then you can use below line, otherwise it is optional.
+    MAINTAINER vrushank patel <your@emailId.com>
+
+    # RUN will attach command to be run exactly when image is executed in container.
+    RUN apt-get update
+
+    # CMD will execute them command when machine is ready and on state (RUN commands will be executed before this).
+    # we'll split commands as a sequence of words in here.
+    CMD ["echo", "Hello world...! from my first docker image.."]
+###
+
+# We just created dockerfile to build our image. now bring your terminal path to Dockerfile, and run docker build.
+# Syntax : docker build -t {image_name}:{tag_name} {Path_To_Dockerfile}
+# tag_name is optional, by default it'll be latest.
+# . (dot) means Dockerfile is in the root of where your terminal is.
+# if you're not in the root of Docker file, then you've to provide the path where Dockerfile exists, then syntax will be...
+# Syntax : docker build -t {image_name}:{tag_name} {Path_To_Dockerfile}
+>> docker build -t sample_ubuntu:1.0 .
+
+# check image..
+>> docker images
+
+# check the image info.. (copy the image id from above command's output or we can use name)
+# Syntax : docker image inspect {image_id}
+OR
+>> docker image inspect sample_ubuntu:1.0
+# it'll show you image info, you'll find out that author is the MAINTAINER from dockerfile.
+
+# now run the image..
+>> docker run sample_ubuntu:1.0
+OUTPUT : Hello world...! from my first docker image..
+
+# in Microservices architecture, we'll have multiple microservices, each of them will have their own docker image.
+# we'll have to manage multiple docker images, for that, docker compose comes to the picture.
+# if docker-compose command doesn't work, then you've to install it separately (just google it) or try (pip install -U docker-compose).
+# Using Compose is basically a three-step process: 
+## Define your app's environment with a Dockerfile so it can be reproduced anywhere. 
+## Define the services that make up your app in docker-compose.yml so they can be run together in an isolated environment. 
+## Run docker-compose up and Compose starts and runs your entire app.
+
+# check docker-compose version and other metadata.
+>> docker-compose -v
+OR
+>> docker-compose --version
+
+# check more info
+>> docker-compose version
+
+# let's create a docker compose, given is the body of docker-compose file, read the comments in it to understand it.
+file-name : docker-compose.yml
+###
+    # first of all, we'll define version of docker compose file.
+    version: '3'
+
+    # now, we've to define all the services, where our docker images will work as a service.
+    services:
+      web:
+        # first, we'll define port where our nginx will be exposed.
+        # {our_port}:{container_port}, we'll expose nginx port 80 of container to our machine's 9090
+        ports:
+        - 9090:80/tcp
+        
+        # Now, we'll define image which will be pulled.
+        image: nginx
+    
+      # now, we'll define database service here for example purpose. we'll use redis.
+      database:
+        image: redis
+###
+
+# once you create above file in somewhere in your pc, bring your cmd or terminal path to there and enter below command to validate docker-compose file.
+>> docker-compose config
+# if it write whole file again, then the file is validated, if it gives error, just google, it is easy to solve it.
+
+# let's run it by up command.
+>> docker-compose up
+# it'll download the nginx and redis image, and then it'll run them, we can access nginx on port 9090 on our machine, open browser and try it.
+
+# open other terminal and use (docker ps), you'll see nginx and redis running on containers.
+# now, the only problem here is in our terminal, logs are going on, if we press Ctrl + C, then docker-compose will stop.
+# we want to run docker-compose in background or detached screen, for that, we can use -d flag with up.
+# before that, press Ctrl + C to stop the currently running docker-compose, then we've to officialy down the docker-compose, so try below command.
+>> docker-compose down
+# it'll stop the docker-compose's all the processes and remove the containers, try (docker ps -a), all the containers of redis and nginx should be removed by now.
+
+# now, let's run the docker compose in detached mode.
+>> docker-compose up -d
+# it'll run docker-compose services in background mode.
+
+# The good thing about docker-compose is it provide us facility to scale our services we written in docker-compose.yml.
+# if we use --scale flag, and provide the number of replication for any service, then it'll scale that service for us.
+# we'll see that by example given below.
+# so, let's assume that we want to scale nginx to be replicated by 4 times, which means 4 different nginx from one image will run.
+# so, we can distribute the load accordingly by external load balancer, we've nginx in web service (check in the program body), so we'll scale web here.
+# for that, we can try below command to scale web service.
+>> docker-compose up --scale web=4
+# based on above command, 4 instances of nginx server should expose, but it'll give you an error here.
+# because, check the web service part of docker-compose.yml, we've defined ports like - 9090:80/tcp.
+# it is running first instance and exposing it on 9090, then for second instance, it'll try o expose it on 9090 only which is now reserved by first instance.
+# if we don't provide ports in web service part of docker-compose, then it'll expose the instance by choosing random ports.
+# but, here, we've provided 9090, so it'll try to expose all the instances on 9090 only, which is not possible.
+
+# So, we've to provide range of port which can be used to replicate the server of service.
+# we'll provide the port range from 9090 to 9100 for nginx web service here.
+# So, open the docker-compose.yml file, and edit the ports part as given below.
+###
+    ports:
+    - 9090-9100:80/tcp
+###
+# now, here, we're providing 10 ports inside port range, so, it'll randomly choose ports from those 10 ports to scale nginx and run it.
+# but if we want to scale this service for more then 10 times replication, then we've to increase this range.
+
+# now, assuming that you've changed from static port to the port range given above, let's run nginx with scaling.
+>> docker-compose up --scale web=4 -d
+# it'll randomly choose 4 ports from port range, and expose nginx in all of them.
+# how'll we know that on what port, the nginx is running?
+# for that, check containers.
+>> docker ps
+# it'll show you all the containers, nginx is scaled at 4 times replication, so 4 running containers of nginx should appear there.
+# in the ports column, you can see the respactive port assigned by particular container, access that port, and you'll see that nginx is exposed in all of them.
+# if we want to balance the load between all these nginx, the ports are exposed, we can do it via external load balancer.
+
+# run docker-compose down to down all the services and to remove all the containers.
+
+# Open the google and check for the word HAProxy, it is a proxy server like nginx which can be used for load balancing.
+# in here, we scaled our web service, which was exposed on different ports. But now, below description is what we want.
+# description : We want to expose only one port 8080 where nginx shouls be accessed. we want to replicate the nginx 10 times.
+# but, we don't want to expose all 10 replications of nginx on different ports. we want to expose only one port 8080.
+# and whenever we access port 8080, each request should go to different different replication of nginx (like load balancing technique).
+# i.e first request should go to first replication (instance) of nginx, second should go to second instance, we've 10 replications, so 11th request should go to again first replication and so on.
+# in the nutshell, we want to distribute the request load among all 10 replications of nginx.
+# for that, we'll use HAProxy, HAProxy will work as a LB (Load Balancer) and will be exposed on 8080.
+# and nginx will not exposed directly, but inside the container, it'll replicated 10 times.
+# below is the docker-copose.yml body, read and understand it carefully.
+
+###
+version: '3'
+services:
+  # in web, we define image of nginx.
+  web:
+    image: nginx
+  # for load balancing via HAProxy, we'll give lb as a name of service.
+  lb:
+    # image is dockercloud/haproxy, it will be pulled.
+    image: dockercloud/haproxy
+    # links will connect to web means web service we just defined above.
+    # link we will use is - web, so, load will be balanced between all the scales or replications of - web. we can use multiple links here.
+    links:
+    - web
+    # HAProxy will run on port 80 of container, and it'll be forwarded to 8080 port of our machine.
+    ports:
+    - 8080:80
+    # shared volume for all the replication is given below.
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+###
+
+# now, once you write above body, run these commands..
+# to validate
+>> docker-compose config 
+# to run
+>> docker-compose up --scale web=6
+# it'll run docker-compose and create 6 replicas of web instance.
+# now try this in another terminal..
+>> docker ps
+# it'll show you 6 running containers of nginx, and one for HAProxy.
+# those 6 containers have no ports exposed to our local machine, but HAProxy has a port exposed as 8080 (we declared in body).
+# now keep terminal and browser side by side.
+# in browser, access localhost:8080.
+# it'll show you welcome page of nginx. and at a log side, it'll show you the log of which instance or replication is getting accessed like web1 or web2.
+# reload the page in browser, and the log in terminal will show you on which replication, the request is going, everytime you reload the page, the request will go to different instances or replicas of nginx.
+# basically we've distributed the load between 6 different replicas of nginx here by HAProxy.
+
+# Now.. Docker Course : Mosh hamedani..
+
+# Let's build Simple Docker image for a nodejs program.
+# in your desktop or somewhere, create a folder with any name and bring you terminal/cmd in it.
+# create HelloWorld.js in it and simply write below code to print Hello from docker and js.
+
+'''
+  console.log("Hello from docker and js");
+'''
+
+# run it by node HelloWorld.js and it'll print the Hello from ....
+# now, in the same dir, create Dockerfile with the same name without any extension.
+# The steps we have to follow while creating Dockerfile are as follows.
+
+1) Start with an OS
+2) Install Node Platform or choose
+3) copy the files
+4) run the program
+
+# Docker file body is give below, read comments and learn.
+
+'''
+  # we'll use nodejs on alpine (very small linux distribution)
+  FROM node:alpine
+
+  # Now, we have to copy all the files, here, we have only one file.
+  COPY . /app
+  # above line will copy all the files to app directory in root in docker image that we'll build.
+
+  # now, we have to change the director to /app in image to run the program because we have topied that program into it.
+  WORKDIR /app
+  # this is like running cd /app in terminal.
+
+  # now, we have to run the command by node to run the application.
+  CMD node app.js
+'''
+
+# Now, we've built our Dockerfile, bring terminal/cmd to this directory and write below command.
+SYNTAX >> : docker build -t {tag_name} {path to Docker file}
+# in our case, our image name should be hello-docker and we're currently in the same directory of Docker file so, we'll use dot (.).
+
+>> docker build -t hello-docker .
+
+# Now, image should be available, pass below command.
+
+>> docker images
+OR
+>> docker image ls
+
+# hello-docker image should be availale in that list.
+# you'll notice the size is bigger than expected because of node and alpine image integration.
+# let's run this image.
+
+>> docker run hello-docker
+
+# It'll print the message as Hello from docker and js.
+# We just built very simple image by docker.
+
+
+# Now, we'll create docker image of front end application which is basic and by default created react app.
+
+# in order to get started, make sure that you have nodejs and npm(node package manager) installed in your machine.
+# install react command line.
+
+>> npm install create-react-app -g
+
+# now, we'll generate react application by create-react-app named hello-docker.
+# and also, we'll run it.
+
+>> create-react-app hello-docker
+>> cd hello-docker
+>> npm start
+
+# now, as you can see, react app is running fine.
+# We'll dockerize this app.
+
+# inside the root directory of project's package.json, create Dockerfile and write below content and understand by comment.
+
+'''
+  # We'll choose node as runtime and Alpine linux as OS with version defined below.
+  FROM node:14.16.0-alpine3.13
+
+  # By default, docker runs the image as a root user (who has highest previledges). We should create a user which will be used by docker to login in alpine and perform all the operations described in Dockerfile because if we allow docker to run everything as root user, it is not safe to let it run by root user, because root user has all the permissions to do things, if system get hacked, then hijacker can do anything via root user, so, we better not run app via root user, instead, we'll add user and docker will login as that user and run the app. this new user will not have all the permissions like root, so that will be safe.
+  # We'll create user app from group app.
+
+  # to create user
+  CMD addgroup app && adduser -S -G app app
+
+  # to login as created user
+  USER app
+
+  # now, if you try to build the image by "docker build -t react-app ." and run it in interactive by "docker run -it react-app sh", user that you'll be logged in automatically will be app. pass the command "whoami", it'll show app.  
+
+  # we want to store all our project files in app dir in root, we just have to use it with WORKDIR, docker will create it automatically if it doesn't exist.
+  WORKDIR /app
+
+  # Now, we've to copy all the files to image.
+  # Syntax : COPY file1.txt file2.txt file3.txt {path to image os} => COPY file.txt hello.txt /app/
+  # while providing multiple files with COPY, we've to provide additional slash (/) after path in image os like /app/
+  # OR to copy all the files to current directory we can use dot, so here.. : COPY . .
+  COPY . .
+
+  # To note, we have ADD which works similarly like COPY, but ADD has some additional functionality.
+  # we can pass URL in ADD like : ADD https://pinterest.com/image1.jpg /images
+  # Also, when we will provide the zip files in ADD to add in image dir, ADD will unzip it and copy all the data to the target directory.
+
+  # Now, here we have node_modules directory inside the project which is installed modules or dependeicies by npm.
+  # every time, while building project, this folder will be generated so we don't need to copy this folder to image.
+  # Also, this directory is very large in size so, We have to exclude this directory.
+  # So, for that, we can not do anything in this Dockerfile, inside the project, we've to create new file named 
+  # .dockerignore file. yes, this is similar to .gitignore. inside the .dockerignore, write directory name that you want to exclude, here it is node_modules so simply write node_modules/ in .dockerignore so this folder will be ignored while building docker image.
+
+  # Now, after all these things, we have our project files inside the image, we just have to install all the dependencies from package.json by npm. so we just need to pass command as "npm install", So it will find the package.json and install all the dependencies from it. We'll use RUN for running command.
+  RUN npm install
+
+  # Now, in this basic app, we're not using anything related to environment variable, but just in case, if we need to use the environment variables, we can command to set environment variables from Dockerfile only by ENV.
+  # let's say we want to set API_KEY=a1b42nn28sx23
+  ENV API_KEY=a1b42nn28sx23
+   OR without equal sign, it works
+  ENV API_KEY a1b42nn28sx23
+
+  # now, our app will run on port 3000 by default (react default port), we have to expose that port.
+  EXPOSE 3000
+
+  # we can run this react-app by building and running docker image by 
+  # "docker build -t react-app ." and "docker run react-app npm start", here we just appended run command by npm start to start react app, but this is for demo, we will pass npm start command from Dockerfile only in next steps.
+  # now, we'll pass command to start react app.
+  # to pass command by CMD, we have two types of CMD, write any one of these.
+  # 1) shell form, here, docker will run the command in separate shell process (shell that exists in /bin/sh).
+  CMD npm start
+  OR
+  # 2) exec form, in this form, docker will run the command in existing terminal only, also, we'll pass command as a list of sequence. if you don't need separate shell process, always use exec form.
+  CMD ["npm", "start"]
+
+  # note that if we pass command by CMD, and if we pass custom command while running the docker image like "docker run react-app echo hello", here, this command we just passed with run command (echo hello) will override the CMD's passed command (npm start) in Dockerfile. if we don't want that to happen, we can use ENTRYPOINT.
+  # So, similarly, ENTRYPOINT is just like CMD, it also has two forms as shell form and exec form like CMD, so the explaination for both is same.
+  # shell form Syntax : ENTRYPOINT npm start 
+  OR
+  # exec form Syntax : ENTRYPOINT ["npm", "start"] 
+  # Note : use any one from CMD or ENTRYPOINT for npm start.
+  # we can't easily override ENTRYPOINT, but if we want to override the command of ENTRYPOINT, then we have that facility as well.
+  # for that, we can pass --entrypoint flag at running image as : "docker run react-app --entrypoint echo hello"
+  # CMD is flexible one so that is the recommended one to use, but if you're certain about what command to pass and that is unchangable, than you can use ENTRYPOINT.  
+
+'''
+# there is too much theory in above code so, let me show the code of Dockerfile in the nutshell below.
+
+'''
+  FROM node:14.16.0-alpine3.13
+  RUN addgroup app && adduser -S -G app app
+  USER app
+  WORKDIR /app
+  COPY . .
+  RUN npm install
+  ENV API_KEY=a1b42nn28sx23
+  EXPOSE 3000
+  CMD ["npm", "start"]
+'''
+
+# Now, build image
+>> docker build -t react-app .
+# We want to run this docker image and we have to pass the port 3000 of container to our desired port of our machine.
+# syntax : append -p flag as : -p {our machine port} : {container port}
+>> docker run react-app -p 1111:3000
+
+# It'll run the react app on 3000 of container and it'll be exposed on port 1111 of our machine.
+
+# in above code, if you build the image over and over again, it'll take the same amount of time to build.
+# because even if you change code and you don't change the package.json, it'll resolve all the dependencies again from package.json even if it is not changed. We must always optimize the build of image.
+# Here, docker usually cache everything and use it while build, but if docker find some change in files, then it'll not use anything from cache for rest of the lines and re execute all the commands..
+# We should modify the Dockerfile in a way such that docker should use npm install if  package.json is modified, if only the code or other files are modified, then it should use cache results for npm install.
+
+# for that, we've to separate the copying the files here.
+'''
+  FROM node:14.16.0-alpine3.13
+  RUN addgroup app && adduser -S -G app app
+  USER app
+  WORKDIR /app
+  # we've to detect changes in package.json and package-lock.json. use wild card *.
+  # regex package*.json will be multiple files, shen we have multiple files in COPY, we have to add / after 
+  # destination path at the end.
+  COPY package*.json ./ 
+  RUN npm install
+  # now, if there is any change in code only, above code can be used from cache and 
+  # rest of the code below will be executed without cache, so npm install will not be 
+  # executed everytime until and unless the package.json is modified.
+  COPY . .
+  ENV API_KEY=a1b42nn28sx23
+  EXPOSE 3000
+  CMD ["npm", "start"]
+'''
+
+# ERROR : here, may be you'll face the error of permisson denied while npm install by our new user created as app.
+# because app user might not have the rights of npm install, for that, google that how to give rights to app or created user to change files, or just use root user in Dockerfile by USER root in third line of Dockerfile.
+
+# By default, image will be tagged by latest, it is okay to use latest tag in dev env, but in prod env, always tag the image with proper versions.
+# there are two types of versioning, one is named and other one is symentic.
+# Named version : stable, LTS, buster etc.
+# Symentic version : 1.0.0, 2.3.4, 4.0.1 etc.
+# we can use any of those
+
+# We can tag our image at building time. let's try simple version 1.
+# SYNTAX : docker build -t {image_name}:{tag_name} {Path_To_Dockerfile}
+>> docker build -t react-app:1 .
+
+# try running command as "docker images", you'll see two images named react-app.
+# one has tag latest and other has tag 1. and as you can see, both's IDs are same which means, latest is pointing to version 1 to show that version 1 is latest. So their ID are same.
+
+# to remove the tag, let's remove image with tag 1.
+>> docker image remove react-app:1
+
+# now, run "docker images", you'll notice that there is no version 1 image.
+# now, we have only one react-app image as reactp-app:latest, and we want to give a tag as "1" as a version again to existing latest image without building again unlike above, which means, after this operation, 1 tagged image should be created and latest should be point to image tagged with 1 (IDs of latest and 1's should same).
+
+>> docker image tag react-app:latest react-app:1
+
+# after this, try running "docker images" again, you'll notice that we have latest tagget image and 1 tagged image, just because we tried to retag the latest image, it doesn't mean it will be deleted or rewrited with new tag 1.
+# Latest image will stay there and point to the latest image which is 1 here, So, their IDs are same as you can see.
+
+# Remember that latest tag doesn't always mean to be a latest version of image. let's see that by example.
+# currently, we have latest image and 1 tagged image which is latest image, and both's IDs are same because latest is pointing to image 1.
+# now, try to apply some minor change in the file and build the image with tag 2 as below.
+>> docker build -t react-app:2 .
+# now run "docker images", you'll see that latest image is still pointing to image 1 (ID of latest and 1 are same) because we havn't updated latest to point to 2 tag which is our actual latest image. So, remember, latest image doesn't always mean latest version of image. 
+# Now, we have to explicitly apply latest tag to 2.
+# SYNTAX : docker image tag {source image_Id or name}:{source tag_name} : {target image_Id or name}:{target tag_name}
+>> docker image tag react-app:2 react-app:latest
+
+# now, try running "docker images" and you'll see that latest is pointing to 2 and IDs of 2 and latest are same but 1's is different because it is not latest one.
+
+# How to share image with others from local, well for that, we have to export our image in proper format which is archive (here tar).
+# All the layers of our docker images will be exported in that tar file with folder names in hash, if you're adventurus, you can explore that archive, here we'll learn how to export image and then how to import exported one.
+# we'll save image as react-app.tar and the image is react-app
+# SYNTAX : docker image save -o {tar_file_name} {image_name}:{image_id}
+
+>> docker image save -o react-app.tar react-app
+# we havn't defined any tag so, latest will be considered.
+
+# now, react-app.tar should be created and you can explore it by extracting files from it.
+
+# now we'll delete this image from docker because we want to reimport this image.
+
+>> docker rmi react-app
+# if your image is running in container, docker could not be able to delete, you can force t delete it like : docker rmi -f react-app.
+# try "docker images", react-app's latest image should be gone.
+# now, we'll reimport the react-app image from react-app.tar
+# SYNTAX : docker image load -i {tar_file_path_and_name}
+>> docker image load -i react-app.tar
+
+# now, try "docker images", it will show you the react-app image with the same ID as before deleted, also, this imported image will come with same tag that you exported, here it was latest but you can try with tag 1 or 2, the same tagged image will be exported and imported with the same tag.
+
+# Docker Containers : container is a special kind of process in docker.
+# to see all the running containers, try docker ps {short for processes}
+>> docker ps
+# it'll show you all the running containers.
+# when you try to run our react-app image, it will bring you tu it's direct log and terminal, but what if we want to start react-app image in the background like in detached modified. we can use -d flag.
+>> docker run -d react-app
+# it'll run react-app in background and show you the process id.
+# now try docker ps and you'll see the container which runs the react-app.
+# as you can see, by default, docker will assign random name to container, but if you want to start multiple containers with proper identification to ID them to understand which is which  and what is the purpose of which, then you can assign a name to container when you run the image.
+# SYNTAX : docker run -d --name {Container_Name} {Image_Name}
+>> docker run -d --name AppReactOne react-app
+
+# Now try docker ps, you'll see that one container is named AppReactOne which runs react-app image in it.
+
+# we just ran the image in detach mode, what if we want to see the logs of that running image or container, for that docker logs comes to rescue.
+# run docker ps and copy the container ID which's log you want to see.
+# Or you can try first three letters or digits of container id, docker will take care of it.
+# SYNTAX : docker logs {Container_Id}
+>> docker logs 655
+# it'll show you the latest logs of that container.
+
+# to see the last specified lines of logs, we can try -n flag.
+# SYNTAX : docker logs -n {number_of_last_lines_you want to see} {container_id}
+>> docker logs -n 5 655
+# it'll show last 5 lines of logs.
+
+# to see the log with timestamp, we can use -t flag, let's use -t and -t together
+>> docker logs -n 5 -t 655
+# it'll show 5 lines of log with their respective timestamps.
+# if we encounter any issue, timestamp can help use to find out which line and when it occured.
+
+# here, let's say our image is running (in alipne or any linux) and we want to pass some commands to that system which is used as a host in our image, we can do it by exec.
+# first, run the image then, run docker ps and copy your running container id.
+# SYNTAX : docker exec {container_id} {command of os}
+>> docker exec 6e4 ls
+# it'll show list of all the files of the directory that we set as work dir in Dockerfile of this image.
+
+# we can use exec to start shell of os of that running container image and set -it flag to interact with that os.
+>> docker exec -it sh
+# it'll start the running container image's host os terminal, you can try your commands and then type exit to exit from that terminal, it'll not impact your running application on that os with that container image.
+
+# try docker ps and copy the container id or copy the container name, you can always use container name or container id any of them to start, stop containers and any other operations.
+# let's stop the container
+# SYNTAX : docker stop {container_id or container_name}
+>> docker stop 6a4
+ 
+# it'll stop the container and docker ps will not show that container anymore, try it.
+# docker ps shows only running containers (processes), to see stopped containers, we can try docker ps -a
+>> docker ps -a
+# to see only container id, we can add -q flag
+>> docker ps -a -q
+OR 
+>> docker ps -aq
+
+# now, try docker ps -a and copy the stopped container's id or name, we'll start the same container again.
+# SYNTAX : docker start {container id or name}
+>> docker start 6a4
+# it'll start the same container again and you can see the running container by docker ps only.
+
+# to remove the container, we can use rm
+# SYNTAX :  docker rm {cotainer id or name}
+>> docker rm 6a4
+
+# it can show error that you're trying to remove a running container if the container is running. we have to force to remove the container so it'll stop and remove.
+>> docker rm -f 6a4
+# it'll forcefully remove the container.
+
+# We've learned how to persist the data by localStorage and docker volumes already.
+
+# Let's check docker's copy command to copy the files from our os to docker's running image os and vice versa.
+# let's say i have a file called new.txt in /usr/vrushank/app/new.txt and i want to copy it to docker's image's os's /app directory, the command is as below.
+# first run the image and get the container id, we'll need it.
+# SYNTAX : docker cp {our_file_location_with_name_by_slashes} {containerId}:{destination_path_of_container_os}
+>> docker ps /usr/vrushank/app/new.txt e1c9043ea8ce:/app
+
+# it'll copy the files in image's os's defined path, you can check it your self.
+# let's copy the file new.txt from /app/new.txt from containerized image's os to our local os's /usr/app.
+# SYNTAX : docker cp {containerId}:{destination_path_of_container_os} {our_file_location_with_name_by_slashes}
+>> docker ps e1c9043ea8ce:/app/new.txt /usr/app
+
+# it'll copy the files as needed, you can check it too.
+
+# Every time, when we develop react app, we use hot reload to see the instant chanes we apply to the source code.
+# if we run the react-app image, we can't see the instant changes here if we change the source code, because source code is stored inside our local machine and the one which is running is relies inside the contaier. we have to keep these both directory in sync in such a way that if we apply any changes in project dir of local machine, that change should reflect immediately to the react app running through docker container, so basically we'll share our local machine's project dir to container's os's project dir.
+
+# bring your terminal or cmd to your project's root directory, so specifying dir will be easy.
+# now, let's say we want to share our current project directory to container's /app directory where our app runs.
+# in linux, we can get current directory by $(pwd) and in windows, we can get it by %cd%, use it accordingly.
+# let's share the dirs.
+# SYNTAX : docker run -d -p {OUR_MACHINE_PORT}:{container_port} -v {our_project_dir}:{container_dir} {image_name}
+>> docker run -d -p 5001:3000 -v $(pwd):/app react-app
+
+# now, if you apply any change inside the code form local machine, it will reflect automatically to the published port by hot reload, open the browser and try it.
+# by this technique, we can share the files among multiple containers.
+
++======================+
+| Docker-compose       |
++======================+
+
+# when we have multiple containers to deal with, we have docker-compose to manage them all in one shot.
+
+# 
+
+RUN executes command(s) in a new layer and creates a new image. E.g., it is often used for installing software packages.
+CMD sets default command and/or parameters, which can be overwritten from command line when docker container runs.
+ENTRYPOINT configures a container that will run as an executable.

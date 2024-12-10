@@ -1,0 +1,752 @@
+Sure, so, my name is Vrushank Patel and I'm 24 years old.
+
+I've some background in software engineering with a Information technology degree that i pursued from Apollo institute of engineering under Gujarat technological university with overall CGPA of 8.24
+
+from last more than 2 and half years i've been working at capsystematic technologies as a software developer in fintech domain, and focusing on the Financial systems messaging formats and design scalable systems for payment interfaces integrations. Currently, I'm working on a project zeus which is One core solution for all securities business lines: retail investments, premium banking, private banking, and trading/brokerage. Project is divided to multiple component projects like ZEUS Core, NXT, ThinClient and GPI.
+
+
+---------------------------------
+why should we hire you ? why do you think you're fit for this position?
+
+“Honestly, I possess all the skills and experience that you're looking for. ... It's not just my background in the past projects, but also my people skills, which will be applicable in this position. On the other hand, I am a self motivated person and I try to exceed my superior's expectations with high-quality work."
+--------------------------------
+weakness :
+I would say my biggest mistake is the fact i find it really hard at times to let go of projects.
+used to work on 2 projects symentensly
+-------------------------------
+Strength : Enthusiasm, Quick Learning Abilities, Task prioritization, Communication Skills, Dedication.
+
+---------------------------------------
+New questions
+:::
+DS : get first repeating integer from array
+
+QUETIONS - to be answered
+=======START========
+Systems :
+What is latency and throughput, how to improve both?
+Concept of availability
+What is cache, followed by cache hit, cache miss, cache eviction policies
+Proxy and it's types
+Difference between replication and sharding
+What is Rate limiting
+What is pubsub model
+If candidate has worked with APIs, We can ask the concept of Pagination
+
+What is Inversion of Control?
+What are the SOLID Principles? Explain with example.
+Decorator pattern
+Singleton pattern
+How to achieve thread-safe singleton patterns
+Factory pattern
+MVC design pattern
+
+Coding Problems --------------------------
+ 
+String
+Longest Substring Without Repeating Characters
+Smallest window in a String containing all characters of other String
+Check whether two Strings are anagram of each other
+print all anagrams together
+Check if given Parentheses expression is balanced or not
+Longest Palindromic Substring
+ 
+ 
+Linked list
+Reverse a Linked List
+Detect Cycle in a Linked List
+Merge Two Sorted Lists
+Remove Nth Node From End Of List
+Find the middle of a given linked list
+Delete last occurrence of an item from linked list
+ 
+ 
+Array
+Check if pair with the given Sum exists in Array
+Find duplicates
+Maximum Subarray
+3 Sum problem
+ 
+Tree
+Maximum Depth of Binary Tree
+Check if two trees have same structure
+Invert/Flip Binary Tree
+Construct Binary Tree from Preorder and Inorder Traversal
+Validate Binary Search Tree
+Smallest Element in a BST
+
+Java:
+=====
+Collections
+hashCode and equals
+create a thread
+Garbage collection
+ThreadSafe collections
+String pool
+Serialization
+Odd even thread if required
+Synchronized method vs synchronized block
+wait notify
+ConcurrentModification exception
+Java 8 features
+ 
+==================
+ 
+Junit:
+======
+how to write a test case
+how to Mock a method
+ 
+OOPS:
+=====
+ 
+ 
+SQL:
+====
+joins
+aggregations like sum, count
+ 
+Employee table
+Department table
+Employee table find how many employees are there in each dept
+Find the total salary distributed in each department
+ 
+Employee
+==========
+ID| Name | Address | Dept Id | Salary
+ 
+Department
+==========
+ID | Dept name
+ 
+Spring:
+=======
+Bean scope singleton vs prototype
+ 
+Linux Commands:
+===============
+how to list all process running in a machine
+how to login to another system within your network
+copying a file
+
+=======END========
+
+difference between Having and Where
+--------------------------------------------------------
+WHERE Clause is used to filter the records from the table based on the specified condition. can be used without GROUPBY or before GROUPBY. can be used with SELECT, UPDATE, DELETE
+HAVING Clause is used to filter record from the groups based on the specified condition. and only after GROUPBY, can be used with SELECT.
+
+How to convert Object into Optional Class
+---------------------------------------
+by Optional.of()
+
+What is HATEOAS
+--------------------------------------------
+Hypermedia as the engine of application state, 
+In REST, returning useful links with actual data is called HATEOS
+
+12 factor app in microservices
+
+@Transactional annotation uses
+--------------------------------------------------
+Spring creates proxies for classes that declare @Transactional on the class itself or on members. The proxy is mostly invisible at runtime. It provides a way for Spring to inject behaviors before, after, or around method calls into the object being proxied.
+On whichever method you declare @Transactional the boundary of transaction starts and boundary ends when method completes.
+
+Transactional annotation provides the application the ability to declaratively control transaction boundaries on CDI managed beans,
+
+
+HashMap vs ConcurrentHashMap
+-------------------------------------------------
+HashMap allows null key-value but ConcurrentHashMap doesn't (throws NullPointerException).
+HashMap is not Thread-safe whereas ConcurrentHashMap is Thread-safe in nature
+HashMap is introduced in JDK 1.2 whereas ConcurrentHashMap is introduced by SUN Microsystem in JDK 1.5.
+
+
+concurrent Hashmap and SyschronizedHashMap
+-------------------------------------------------
+
+
+ControllerAdvise and RestControllerAdvice
+-------------------------------------------------
+@RestControllerAdvice is just a syntactic sugar for @ControllerAdvice + @ResponseBody
+@ControllerAdvice can be used even for REST web services as well, but you need to additionally use @ResponseBody.
+
+@ResponseBody : tells spring to convert or serialise the java object that is being returned to the corresponding REST structure.
+@RequestBody : Helps us to deserialize the request params from JSON to java object.
+
+@ControllerAdvice is very useful to handle exceptions when you have multiple Spring REST API controllers doing a lot of different work.
+That means when writing any application you encounter exceptions and to handle them at each method level is tedious and not optimal. So in order to overcome that, spring has introduced the concept of @ControllerAdvice which will intercept all the controllers and look for the exceptions thrown. This is at a global level means you only have one @ControllerAdvice for each application and it will intercept the exceptions thrown by the controllers in that particular application context.
+
+
+Internal working of Garbage collector
+-------------------------------------------------
+Thrad safe ArrayList:
+
+Use Collections.synchronizedList().
+
+Collections.synchronizedList(new ArrayList<YourClassNameHere>())
+
+Thread safe Map:
+
+Use Collections.synchronizedMap()
+
+Collections.synchronizedMap(new HashMap<String, String>())
+-------------------------------------------------
+Runnable vs Callable interface:
+
+Runnable is part of java.lang.Runnable
+Callable is part of java.util.concurrent
+
+Runnable has run method that needs to be overridden
+Callable has call method that needs to be overridden
+
+run doesn't return anything
+call returns result of parallel processing of a task
+
+run can't throw checked exception
+call throws checked exception
+
+Runnable instances can be run by Thread class and ExecutorService
+Callable instances can be run by ExecutorService
+
+
+-------------------------------------------------
+Java : Failsafe and fail fast iterators in Java
+
+Fail-Fast iterator :
+	Throws Concurrent modification exception when we change the collection while iterating it through this iterator.
+	Like if we use while (iterator.hasNext()) and if we add anything to the arrayList or underlying collection, it'll throw CMException.
+	
+	But if we remove element by iterator's remove method, it's safe and doesn't throw any exception.
+	However, If we remove element by collection's remove method, it'll throw the exception.
+	
+	Ex. : ArrayList, HashMap, etc.
+Fail-Safe iterator :
+	These iterators create a clone of the actual Collection and iterate over it. If any modification happens after the iterator is created, the copy still remains untouched. Hence, these Iterators continue looping over the Collection even if it's modified.
+	The Fail-Safe Iterators have a few disadvantages, though. One disadvantage is that the Iterator isn't guaranteed to return updated data from the Collection, as it's working on the clone instead of the actual Collection.
+	Another disadvantage is the overhead of creating a copy of the Collection, both regarding time and memory.
+	
+	Ex. ConcurrentHashMap, CopyOnWriteArrayList,
+
+
+---------------------------------------
+
+ACID :
+------------------------
+Atomicity : All the queries of transaction, either all will success or all will fail.
+Cosistency : Transaction will be commited or rolled back, can not make DB in invalidate state.
+Isolation : Sequential transactions, can't affect each other, completely separate from each other.
+Durability : Once commited, data will be durable against the failures, powercuts etc.
+
+------------------------
+immutables :
+For instance, Character, Double, Boolean, Byte, Float, Long, Short, String, Integer and all fundamental wrapper groups are immutable classes.
+-------------------------------
+SOLID Principles Java
+In Java, SOLID principles are an object-oriented approach that are applied to software structure design. It is conceptualized by Robert C. Martin (also known as Uncle Bob). These five principles have changed the world of object-oriented programming, and also changed the way of writing software. It also ensures that the software is modular, easy to understand, debug, and refactor.
+
+The word SOLID acronym for:
+
+Single Responsibility Principle (SRP)
+Open-Closed Principle (OCP)
+Liskov Substitution Principle (LSP)
+Interface Segregation Principle (ISP)
+Dependency Inversion Principle (DIP)
+
+https://www.baeldung.com/solid-principles
+https://www.educative.io/edpresso/what-are-the-solid-principles-in-java
+
+-----------------------------------
+make spring boot app non web :
+The application can also be called as Spring Boot Standalone application. To develop a non web application, your Application needs to implement CommandLineRunner interface along with its run method. This run method acts like a main of your application.
+-----------------------------
+inject vs autowired :
+@Inject and @Autowired both annotations are used for autowiring in your application. @Inject annotation is part of Java CDI which was introduced in Java 6, whereas @Autowire annotation is part of spring framework.
+-------------------------------
+QueryParam or RequestParam vs PathParam :
+
+-- RequestParam :
+      To assign URI parameter values to method arguments. In Spring, it is @RequestParam.
+      Eg.,
+      http://localhost:8080/books?isbn=1234
+
+      @GetMapping("/books/")
+         public Book getBookDetails(@RequestParam("isbn") String isbn) {
+
+
+-- PathParam:
+      To assign URI placeholder values to method arguments. In Spring, it is @PathVariable.
+      Eg.,
+
+      http://localhost:8080/books/1234
+
+      @GetMapping("/books/{isbn}")
+         public Book getBook(@PathVariable("isbn") String isbn) {
+----------------------------------
+CRUDRepository vs JPARepository :
+
+CrudRepository :
+CrudRepository is a base interface and extends the Repository interface.
+CrudRepository mainly provides CRUD (Create, Read, Update, Delete) operations.
+Return type of saveAll() method is Iterable.
+Use Case - To perform CRUD operations, define repository extending CrudRepository.
+
+JpaRepository :
+JpaRepository extends PagingAndSortingRepository that extends CrudRepository.
+JpaRepository provides CRUD and pagination operations, along with additional methods like flush(), saveAndFlush(), and deleteInBatch(), etc.
+Return type of saveAll() method is a List.
+Use Case - To perform CRUD as well as batch operations, define repository extends JpaRepository.
+---------------------------------
+PUT vs PATCH :
+both send set of instructions and data but, PUT replace the data whereas PATCH modifies the existing data.
+--------------------------------
+ConcurrentModificationException :
+Occurs when we try to modify object while other thread is iterating through it.
+-----------------------------
+error vs exception
+Exceptions and errors both are subclasses of Throwable class. Errors mostly occur at runtime that's they belong to an unchecked type. ... Exceptions are the problems which can occur at runtime and compile time.
+------------------------------
+The ++ is not thread-safe, because the counter++ operation is not atomic, which means it consists more than one atomic operations. In this case, one is accessing value and the other is increasing the value by one.
+-------------------------------
+Serial garbage collector : use single thread, enabled with -XX:+UseSerialGC
+parallel garbage collector (default) : known as throughput collector, use multiple threads, can be enabled by -XX:+UseParallelGC
+----------------------------
+create imutable class :
+The class must be declared as final so that child classes can’t be created.
+Data members in the class must be declared private so that direct access is not allowed.
+Data members in the class must be declared as final so that we can’t change the value of it after object creation.
+A parameterized constructor should initialize all the fields performing a deep copy so that data members can’t be modified with an object reference.
+Deep Copy of objects should be performed in the getter methods to return a copy rather than returning the actual object reference)
+
+------------------------------
+patterns :
+
+Structural Design Pattern: Composite Pattern, Decorator Pattern, Adapter Pattern, Bridge Pattern, Proxy Pattern, Facade Pattern, Flyweight Pattern.
+
+Creational Design Pattern: Singleton Pattern, Prototype Pattern, Factory Pattern, Abstract Factory Pattern, Builder Pattern.
+
+Behavioural Design Pattern: Interpreter Pattern, Iterator Pattern, Chain Of Responsibility Pattern, Observer Pattern, State Pattern, Command Pattern, Mediator Pattern, Memento Pattern, Strategy Pattern, Visitor Pattern, Template Pattern
+
+---------------------
+Explain Thread States
+Ans. Runnable - waiting for its turn to be picked for execution by the thread schedular based on thread priorities.
+
+Running - The processor is actively executing the thread code. It runs until it becomes blocked, or voluntarily gives up its turn.
+
+Waiting: A thread is in a blocked state while it waits for some external processing such as file I/O to finish.
+
+Sleeping - Java threads are forcibly put to sleep (suspended) with Thread.sleep. they can resume using Thread.resume method.
+
+Blocked on synchronization - Will move to Runnable when a lock is acquired.
+
+Dead - The thread is finished working.
+----------------------------
+why interface needs default method :
+Like regular interface methods, default methods are implicitly public; there's no need to specify the public modifier. Unlike regular interface methods, we declare them with the default keyword at the beginning of the method signature, and they provide an implementation.
+-----------------------
+java 8 features :
+
+Lambda expressions,
+Method references,
+Functional interfaces,
+Stream API,
+Default methods,
+Base64 Encode Decode,
+Static methods in interface,
+Optional class,
+Collectors class,
+ForEach() method,
+Nashorn JavaScript Engine,
+Parallel Array Sorting,
+Type and Repating Annotations,
+IO Enhancements,
+Concurrency Enhancements,
+JDBC Enhancements etc.
+----------------------------------------------------------------------------------------------
+SQL :
+Queries vs stored procedures SP
+“Stored procedures are precompiled and cached so the performance is much better.” we don't require write code again and again.
+---------------------------------------------------------------------------------------------
+difference between EXISTS and IN
+EXISTS is used to determine if any values are returned or not. Whereas, IN can be used as a multiple OR operator. If the sub-query result is large, then EXISTS is faster than IN.
+Once the single positive condition is met in the EXISTS condition then the SQL Engine will stop the process.
+
+The EXISTS clause is much faster than IN when the subquery results is very large. Conversely, the IN clause is faster than EXISTS when the subquery results is very small. Also, the IN clause can't compare anything with NULL values, but the EXISTS clause can compare everything with NULLs.
+
+------------------------------------------------------------------------------------------------------
+How to find the third largest salary?
+
+SELECT name, MAX(salary) AS salary
+  FROM employee
+ WHERE salary < (SELECT MAX(salary)
+                 FROM employee
+                 WHERE salary < (SELECT MAX(salary)
+                 FROM employee)
+                );
+
+difference between inner and outer join ...
+         The major difference between inner and outer joins is that inner joins result in the intersection of two tables, whereas outer joins result in the union of two tables.
+
+----------------------------------------------------------------------------------------------
+programming and technologies :
+I am not restricted by choice of cloud provider, tech
+stack or programming language. I believe all of these will evolve and change as the company grows
+
+------------------------------------------------
+Waterfall vs agile
+What is Waterfall methodology?
+Waterfall Model methodology which is also known as Liner Sequential Life Cycle Model. Waterfall Model followed in the sequential order, and so project development team only moves to next phase of development or testing if the previous step completed successfully.
+
+What is the Agile methodology?
+Agile methodology is a practice that helps continuous iteration of development and testing in the software development process. In this model, development and testing activities are concurrent, unlike the Waterfall model. This process allows more communication between customers, developers, managers, and testers.
+------------------------------------------------------
+We can't make static variables in any static or non-static of method.
+We can't make constructor static or final any of them because that is just not possible.
+
+-------------------------------------------------------
+what is the difference between StringBuffer and StringBuilder?
+
+StringBuffer operations are threadsafe and synchronized whereas StringBuilder is the opposite.
+For multiple threads and good performance, use stringBuilder,
+For safety reasons, use stringBuffer
+--------------------------------------------------------
+write a thread safe singleton class
+
+public class ASingleton {
+
+	private static ASingleton instance = null;
+
+	private ASingleton() {
+	}
+
+	public static ASingleton getInstance() {
+		if (instance == null) {
+			instance = new ASingleton();
+		}
+		return instance;
+	}
+
+}
+
+--------------------------------------------------------
+
+java : generate nullpoiterexception.
+
+import java.io.*;
+
+class temp{
+	public static void main(String[] args){
+		String ptr = null;
+      System.out.print(ptr.equals("somestr"));
+
+	}
+}
+--------------------------------------------------------
+Dynamic Method Dispatcher is also known as Runtime Polymorphism in Java (Method overriding)
+
+--------------------------------------------------------
+java : which colllection can be changed while iterating it?
+
+Use Java 8's removeIf(),
+ex :
+letters.removeIf(x -> !x.equals("A"));
+
+To remove safely,
+
+letters.removeIf(x -> !x.equals("A"));
+
+Java 8's stream() interface provides a great way to update a list in place.
+
+To safely update items in the list, use map():
+
+List<String> letters = new ArrayList<>();
+
+// add stuff to list
+
+letters = letters.stream().map(x -> "D").collect(Collectors.toList());
+
+To safely remove items in place, use filter():
+
+
+letters.stream().filter(x -> !x.equals("A")).collect(Collectors.toList());
+..............................................
+data structures.
+: get pivot element of rotated sorted array
+
+Docker
+--------------------
+difference between CMD, RUN and entrypoint
+answer :
+RUN executes command(s) in a new layer and creates a new image. E.g., it is often used for installing software packages.
+CMD sets default command and/or parameters, which can be overwritten from command line when docker container runs.
+
+ENTRYPOINT command and parameters will not be overwritten from command line. Instead, all command line arguments will be added after ENTRYPOINT parameters.
+
+
+JAVA
+-----------------
+Sort collection of objects in java :
+   personList.sort(Comparator.comparing(Person::getName));
+-------------------
+Comparator vs Comparable :
+Comparable provides a single sorting sequence. In other words, we can sort the collection on the basis of a single element such as id, name, and price.
+
+The Comparator provides multiple sorting sequences. In other words, we can sort the collection on the basis of multiple elements such as id, name, and price etc.
+
+Comparable affects the original class, i.e., the actual class is modified.
+
+Comparator doesn't affect the original class, i.e., the actual class is not modified.
+------------------
+Checked exception : checked at the compile time and will occur if we're not using try catch or throwing in method signature, FileNotFoundException.
+UnChecked Exception : occur at run time, DivideByZeroException, Some common unchecked exceptions in Java are NullPointerException, ArrayIndexOutOfBoundsException and IllegalArgumentException.
+.
+------------------
+Use StringBuilder whenever possible because it is faster than StringBuffer. 
+But, if thread safety is necessary then use StringBuffer objects.
+------------------
+Postfix operators i.e () [] . is at the highest precedence.
+------------------
+Variables used in a switch statement can only be a string, enum, byte, short, int, or char.
+------------------
+Sizes :
+bytes 1 byte
+String 2 bytes
+int	4 bytes
+long	8 bytes
+float	4 bytes
+double	8 bytes
+------------------------
+
+memory management
+JVM Memory Structure :
+heap area : Heap stores the actual objects. It creates when the JVM starts up. The user can control the heap if needed. It can be of fixed or dynamic size. When you use a new keyword, the JVM creates an instance for the object in a heap. While the reference of that object stores in the stack. There exists only one heap for each running JVM process. When heap becomes full, the garbage is collected. For example:
+
+method area : Method Area is a part of the heap memory which is shared among all the threads. It creates when the JVM starts up. It is used to store class structure, superclass name, interface name, and constructors.
+
+stack area : Stack Area generates when a thread creates. It can be of either fixed or dynamic size. The stack memory is allocated per thread. It is used to store data and partial results. It contains references to heap objects. It also holds the value itself rather than a reference to an object from the heap. The variables which are stored in the stack have certain visibility, called scope.
+
+Working of the Garbage Collector
+
+------------------------------------------
+static block :
+Java supports a special block, called a static block (also called static clause) that can be used for static initializations of a class. This code inside the static block is executed only once: the first time the class is loaded into memory.
+Ex :
+static {
+   // code stuff
+}
+--------------------------------------------------
+instance block :
+Instance Initializer block is used to initialize the instance data member. It run each time when object of the class is created.
+Instance block will be called before constructor.
+
+Ex :
+class Bike7{
+    int speed;
+
+    Bike7(){System.out.println("speed is "+speed);}
+
+   // this is instance block
+    {speed=100;}
+
+    public static void main(String args[]){
+    Bike7 b1=new Bike7();
+    Bike7 b2=new Bike7();
+    }
+}
+
+
+--------------------------------------------------
+java 8 features :
+
+Lambda expressions,
+Method references,
+Functional interfaces,
+Stream API,
+Default methods,
+Base64 Encode Decode,
+Static methods in interface,
+Optional class,
+Collectors class,
+ForEach() method,
+Nashorn JavaScript Engine,
+Parallel Array Sorting,
+Type and Repating Annotations,
+IO Enhancements,
+Concurrency Enhancements,
+JDBC Enhancements etc.
+
+--------------------------------------------------------
+
+why string is immutable : The String objects are cached in the String pool, and it makes the String immutable.
+The String is immutable in Java because of the security, synchronization and concurrency, caching, and class loading. The reason of making string final is to destroy the immutability and to not allow others to extend it. The String objects are cached in the String pool, and it makes the String immutable.
+
+-----------------------------------------
+what if in hash map, same hash gets generated for multiple keys
+HashMap hash change : we can override HashCode method to change the hashing strategy
+-----------------------------------------
+Transient keyword : to prevent serialization
+------------------------------------------
+functional interface
+
+A functional interface is an interface that contains only one abstract method. They can have only one functionality to exhibit. From Java 8 onwards, lambda expressions can be used to represent the instance of a functional interface. A functional interface can have any number of default methods. Runnable, ActionListener, Comparable are some of the examples of functional interfaces.
+
+Ex.. thread's Runnable interface, it has only one method : run()
+-----------------------------------------
+what does versions in pom.xml shows like 2.x.x (what is 2, what is x, what is x)
+<major>.<minor>.<patch>-<qualifier>-<build number>
+example: 4.5.11-RC1-3732
+----------------------------------
+
+what are the bean scope in spring boot, which did you use
+singleton : same object will be containerized and will be returned (can be done using Scope annotation @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON))
+
+prototype : A bean with the prototype scope will return a different instance every time it is requested from the container.
+
+request :
+session :
+application :
+
+--------------------------
+
+Hashcode contract with equals
+The Java super class java.lang.Object defines two important methods:
+	public boolean equals(Object obj)
+	public int hashCode()
+
+The problem is caused by the un-overridden method "hashCode()". The contract between equals() and hashCode() is:
+1) If two objects are equal, then they must have the same hash code.
+2) If two objects have the same hash code, they may or may not be equal.
+Answer :
+https://www.programcreek.com/2011/07/java-equals-and-hashcode-contract/
+
+-----------------------------
+spring boot actuator.
+Spring Boot includes a number of additional features to help you monitor and manage your application when you push it to production. You can choose to manage and monitor your application by using HTTP endpoints or with JMX. Auditing, health, and metrics gathering can also be automatically applied to your application.
+like /actuator/health will give you set of info of basic health information like beans caches auditsEvents etc.
+
+---------------------------
+
+new fetures of java 8
+Lambda expressions,
+Method references,
+Functional interfaces,
+Stream API,
+Default methods,
+Base64 Encode Decode,
+Static methods in interface,
+Optional class,
+Collectors class,
+ForEach() method,
+Nashorn JavaScript Engine,
+Parallel Array Sorting,
+Type and Repating Annotations,
+IO Enhancements,
+Concurrency Enhancements,
+JDBC Enhancements etc.
+---------------------------
+Core Java Concepts like Oops, Multithreading, Collection, Java 8 Stream API.
+
+
+Authentication and Authorisation.
+
+
+No.	Iterator	ListIterator
+1)	The Iterator traverses the elements in the forward direction only.	ListIterator traverses the elements in backward and forward directions both.
+2)	The Iterator can be used in List, Set, and Queue.	ListIterator can be used in List only.
+3)	The Iterator can only perform remove operation while traversing the collection.	ListIterator can perform ?add,? ?remove,? and ?set? operation while traversing the collection.
+
+AOP : advices
+
+Before Advice
+After Advice
+Around Advice
+After Throwing
+After Returning
+
+Python
+----------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+Decorators
+
+# decorator function to convert to lowercase
+def lowercase_decorator(function):
+   def wrapper():
+       func = function()
+       string_lowercase = func.lower()
+       return string_lowercase
+   return wrapper
+# decorator function to split words
+def splitter_decorator(function):
+   def wrapper():
+       func = function()
+       string_split = func.split()
+       return string_split
+   return wrapper
+@splitter_decorator # this is executed next
+@lowercase_decorator # this is executed first
+def hello():
+   return 'Hello World'
+hello()   # output => [ 'hello' , 'world' ]
+----------------------------------------------------------------------------------------------------------------------
+List-Dict comprehensions
+
+my_list = [2, 3, 5, 7, 11]
+squared_list = [x**2 for x in my_list]    # list comprehension
+# output => [4 , 9 , 25 , 49 , 121]
+squared_dict = {x:x**2 for x in my_list}    # dict comprehension
+# output => {11: 121, 2: 4 , 3: 9 , 5: 25 , 7: 49}
+
+---------------------------------------------------------------
+Lambda
+
+mul = lambda a, b : a * b
+
+-----------------------------------------------------------------------------
+
+26. How do you copy an object in Python?
+In Python, the assignment statement (= operator) does not copy objects. Instead, it creates a binding between the existing object and the target variable name. To create copies of an object in Python, we need to use the copy module. Moreover, there are two ways of creating copies for the given object using the copy module -
+
+Shallow Copy is a bit-wise copy of an object. The copied object created has an exact copy of the values in the original object. If either of the values is a reference to other objects, just the reference addresses for the same are copied.
+Deep Copy copies all values recursively from source to target object, i.e. it even duplicates the objects referenced by the source object.
+
+from copy import copy, deepcopy
+list_1 = [1, 2, [3, 5], 4]
+## shallow copy
+list_2 = copy(list_1)
+list_2[3] = 7
+list_2[2].append(6)
+list_2    # output => [1, 2, [3, 5, 6], 7]
+list_1    # output => [1, 2, [3, 5, 6], 4]
+## deep copy
+list_3 = deepcopy(list_1)
+list_3[3] = 8
+list_3[2].append(7)
+list_3    # output => [1, 2, [3, 5, 6, 7], 8]
+list_1    # output => [1, 2, [3, 5, 6], 4]
+
+----------------------------------------------------------------------------------------------------------------------
+
+Generators
+
+## generate fibonacci numbers upto n
+def fib(n):
+   p, q = 0, 1
+   while(p < n):
+       yield p
+       p, q = q, p + q
+x = fib(10)    # create generator object
+
+## iterating using __next__(), for Python2, use next()
+x.__next__()    # output => 0
+x.__next__()    # output => 1
+x.__next__()    # output => 1
+x.__next__()    # output => 2
+x.__next__()    # output => 3
+x.__next__()    # output => 5
+x.__next__()    # output => 8
+x.__next__()    # error
+
+## iterating using loop
+for i in fib(10):
+   print(i)    # output => 0 1 1 2 3 5 8
+30. What is PYTHONPATH in Python?

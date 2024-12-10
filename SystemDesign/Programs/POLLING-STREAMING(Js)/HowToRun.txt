@@ -1,0 +1,23 @@
+open three terminals
+
+Run server.js by node server.js (or you can use npm start).
+    > node server.js
+        OR
+    > npm start
+
+to run client, you've to pass name and mode as a command line argument.
+
+in one terminal (to set mode to streaming), 
+    
+    > node client.js Vrushank stream
+
+in another terminal (to set mode to polling),
+
+    > node client.js Mihir poll
+
+Once chat is started, these both clients can communicate with each other,
+You'll notice that streaming mode will show you message immediately after other client send it.
+but polling will take 3 seconds to show the message up (because we've set setInterval of polling to 3000 in client.js).
+
+In some use cases, polling is better than streaming. Ex. weather app.
+Similarly, in some other scenarios, streaming is better than polling. Ex. chat app.
